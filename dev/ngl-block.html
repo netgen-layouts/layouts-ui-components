@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Components Demo</title>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/lit/polyfill-support.js"></script>
+    <script type="module" src="../components/block/element.js"></script>
+    <style>
+      body{margin:0; padding: 50px;}
+      .ngl-block{padding:10px; background: #ffe; margin:20px 0; }
+      button{padding: 10px; margin:10px; background-color: #9f9;}
+
+    </style>
+  </head>
+  <body>
+    <h1>Demos</h1>
+
+    <ngl-block blockId="1">
+      <div class="ngl-block">
+        <h1>This is inner content of block 1</h1>
+        <p>Eating carbs for breakfast and lunch gives me more cravings the rest of the day: especially for more carbs. Dinnertime carbs don’t matter much, because I’m winding down at that point of the day, and cravings will soon be precluded by sleep. Eliminating mid-day cravings has made it easier to eat in greater moderation. As a result, I’ve slowly but steadily lost weight since starting to do this. And since I’m not cutting out carbs totally, I’m avoiding the “no-carb flu” symptoms (massive fatigue, brain fog, and headaches) that hit me like a ton of bricks when I first adopted the ketogenic diet for a short time (and lost a lot of weight as a result) back in January.</p>
+        <div class="timestamp"></div>
+        <button>More</button>
+      </div>
+    </ngl-block>
+
+    <ngl-block blockId="2">
+      <div class="ngl-block">
+        <h1>This is inner content of block 2</h1>
+        <p>Eating carbs for breakfast and lunch gives me more cravings the rest of the day: especially for more carbs. Dinnertime carbs don’t matter much, because I’m winding down at that point of the day, and cravings will soon be precluded by sleep. Eliminating mid-day cravings has made it easier to eat in greater moderation. As a result, I’ve slowly but steadily lost weight since starting to do this. And since I’m not cutting out carbs totally, I’m avoiding the “no-carb flu” symptoms (massive fatigue, brain fog, and headaches) that hit me like a ton of bricks when I first adopted the ketogenic diet for a short time (and lost a lot of weight as a result) back in January.</p>
+        <div class="timestamp"></div>
+        <button>More</button>
+      </div>
+    </ngl-block>
+
+  </body>
+</html>
