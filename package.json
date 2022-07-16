@@ -1,0 +1,83 @@
+{
+  "name": "@netgen-layouts/ngl-components",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Netgen Layouts - Frontend components",
+  "main": "components.js",
+  "module": "components.js",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
+    "lint:eslint": "eslint 'components/**/*.js'",
+    "lint:lit-analyzer": "lit-analyzer components/**/index.js",
+    "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
+    "analyze": "cem analyze --litelement --globs \"**/*.js\" --exclude docs",
+    "analyze:watch": "cem analyze --litelement --globs \"**/*.js\" --exclude docs --watch",
+    "serve": "wds --watch",
+    "serve:prod": "MODE=prod npm run serve",
+    "test": "npm run test:dev && npm run test:prod",
+    "test:dev": "wtr",
+    "test:watch": "wtr --watch",
+    "test:prod": "MODE=prod wtr",
+    "test:prod:watch": "MODE=prod wtr --watch",
+    "checksize": "rollup -c ; cat components.bundled.js | gzip -9 | wc -c ; rm components.bundled.js"
+  },
+  "keywords": [
+    "web-components",
+    "lit-element",
+    "javascript",
+    "lit"
+  ],
+  "author": "Marko Žabčić <marko@effectiva.hr>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@floating-ui/dom": "^0.4.4",
+    "lit": "^2.1.0"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^0.12.1",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",
+    "@custom-elements-manifest/analyzer": "^0.5.7",
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing": "^3.0.0-next.1",
+    "@open-wc/testing-karma": "^4.0.9",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-replace": "^3.0.0",
+    "@types/mocha": "^9.0.0",
+    "@web/dev-server": "^0.1.22",
+    "@web/dev-server-legacy": "^0.1.4",
+    "@web/dev-server-rollup": "^0.3.9",
+    "@web/rollup-plugin-copy": "^0.3.0",
+    "@web/rollup-plugin-html": "^1.10.3",
+    "@web/test-runner": "^0.13.28",
+    "@web/test-runner-commands": "^0.6.1",
+    "@web/test-runner-mocha": "^0.7.4",
+    "@web/test-runner-playwright": "^0.8.4",
+    "@webcomponents/webcomponentsjs": "^2.6.0",
+    "babel-eslint": "^10.1.0",
+    "deepmerge": "^4.2.2",
+    "eslint": "^7.32.0",
+    "lit-analyzer": "^1.1.10",
+    "mocha": "^9.1.1",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.77.0",
+    "rollup-plugin-minify-html-literals": "^1.2.6",
+    "rollup-plugin-summary": "^1.4.3",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "customElements": "custom-elements.json",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netgen-layouts/ngl-components.git"
+  },
+  "bugs": {
+    "url": "https://github.com/netgen-layouts/ngl-components/issues"
+  },
+  "homepage": "https://github.com/netgen-layouts/ngl-components#readme"
+}
