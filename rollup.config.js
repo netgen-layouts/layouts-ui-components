@@ -18,19 +18,21 @@ import replace from '@rollup/plugin-replace';
 const shouldMinify = false;
 
 export default {
-  input: 'components',
-  preserveEntrySignatures: 'strict',
+  input: 'components/block/element.js',
+  // preserveEntrySignatures: 'strict',
   output: {
+    name: 'ngl',
     file: 'dist/dist.js',
     sourcemapPathTransform: (relativeSourcePath, sourcemapPath) => {
       // will replace relative paths with absolute paths
       return path.resolve(path.dirname(sourcemapPath), relativeSourcePath);
     },
     sourcemap: shouldMinify,
-    format: 'esm',
+    format: 'umd',
   },
   plugins: [
     replace({
+      preventAssignment: true,
       'Reflect.decorate': 'undefined',
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
@@ -41,7 +43,7 @@ export default {
     shouldMinify && minifyHTML(),
     terser({
       ecma: 2020,
-      module: true,
+      module: false,
       warnings: true,
     }),
 
