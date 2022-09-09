@@ -56,7 +56,7 @@ export default class Dropdown extends LitElement {
   }
 
   get tabbableElements() {
-    const tabbleMenuItems = this.dropdownContentElement.querySelectorAll('a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"]');
+    const tabbleMenuItems = this.dropdownContentElement.querySelectorAll('a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])');
 
     const filteredMenuItems = Array.from(tabbleMenuItems).filter(
       element => !element.hasAttribute('disabled') && !element.getAttribute('aria-hidden')
