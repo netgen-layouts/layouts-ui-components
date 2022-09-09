@@ -11,22 +11,27 @@ describe('bu-badge', () => {
   it('default render', async () => {
     const element = await fixture(html`<bu-badge count="1"></bu-badge>`);
 
-    assert.dom.equal(element, `
+    assert.dom.equal(
+      element,
+      `
       <bu-badge count=1 theme="secondary"></bu-badge>
-    `);
+    `
+    );
   });
 
   it('hidden if count is 0', async () => {
     const element = await fixture(html`<bu-badge count="0"></bu-badge>`);
 
-    assert.shadowDom.equal(element, "");
+    assert.shadowDom.equal(element, '');
     assert.equal(getComputedStyle(element).display, 'none');
   });
 
   it('visible if count is 0 and showZero set to true', async () => {
-    const element = await fixture(html`<bu-badge count="0" showZero></bu-badge>`);
+    const element = await fixture(
+      html`<bu-badge count="0" showZero></bu-badge>`
+    );
 
-    assert.shadowDom.equal(element, "0");
+    assert.shadowDom.equal(element, '0');
     assert.equal(getComputedStyle(element).display, 'inline-flex');
   });
 });

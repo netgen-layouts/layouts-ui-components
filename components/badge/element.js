@@ -5,14 +5,14 @@ export default class Badge extends LitElement {
   static styles = [style];
 
   static properties = {
-    count: { type: Number, reflect: true },
-    theme: { type: String, reflect: true },
-    showZero: { type: Boolean },
+    count: {type: Number, reflect: true},
+    theme: {type: String, reflect: true},
+    showZero: {type: Boolean},
   };
 
   constructor() {
     super();
-    this.theme = "secondary";
+    this.theme = 'secondary';
   }
 
   render() {

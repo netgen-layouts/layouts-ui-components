@@ -1,16 +1,24 @@
-import { LitElement, html } from 'lit';
-import { autoUpdate, arrow, computePosition, flip, offset, shift, size } from '@floating-ui/dom';
+import {LitElement, html} from 'lit';
+import {
+  autoUpdate,
+  arrow,
+  computePosition,
+  flip,
+  offset,
+  shift,
+  size,
+} from '@floating-ui/dom';
 import style from './style.js';
 
 export default class Dropdown extends LitElement {
   static styles = [style];
 
   static properties = {
-    open: { type: Boolean, reflect: true },
-    placement: { type: String },
-    offsetVertical: { type: Number },
-    offsetHorizontal: { type: Number },
-    caret: { type: Boolean },
+    open: {type: Boolean, reflect: true},
+    placement: {type: String},
+    offsetVertical: {type: Number},
+    offsetHorizontal: {type: Number},
+    caret: {type: Boolean},
   };
 
   constructor() {
@@ -56,10 +64,14 @@ export default class Dropdown extends LitElement {
   }
 
   get tabbableElements() {
-    const tabbleMenuItems = this.dropdownContentElement.querySelectorAll('a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])');
+    const tabbleMenuItems = this.dropdownContentElement.querySelectorAll(
+      'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])'
+    );
 
     const filteredMenuItems = Array.from(tabbleMenuItems).filter(
-      element => !element.hasAttribute('disabled') && !element.getAttribute('aria-hidden')
+      (element) =>
+        !element.hasAttribute('disabled') &&
+        !element.getAttribute('aria-hidden')
     );
 
     return filteredMenuItems;
@@ -74,7 +86,7 @@ export default class Dropdown extends LitElement {
   }
 
   updateAccessibleTrigger() {
-    const { triggerElement } = this;
+    const {triggerElement} = this;
 
     if (triggerElement.tagName.toLowerCase() === 'a') {
       triggerElement.setAttribute('role', 'button');
@@ -90,20 +102,29 @@ export default class Dropdown extends LitElement {
   }
 
   handleDocumentKeyDown(event) {
-
     if (event.key === 'Escape') {
       this.closeAndRefocus();
-    } else if (['Tab', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
-
+    } else if (
+      ['Tab', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)
+    ) {
       event.preventDefault();
 
-      let menuIndex = this.tabbableElements.findIndex(item => item === event.target);
+      let menuIndex = this.tabbableElements.findIndex(
+        (item) => item === event.target
+      );
 
-      if ((event.key === 'ArrowUp' || (event.shiftKey && event.key === 'Tab')) && menuIndex > 0) {
+      if (
+        (event.key === 'ArrowUp' || (event.shiftKey && event.key === 'Tab')) &&
+        menuIndex > 0
+      ) {
         menuIndex--;
       }
 
-      if ((event.key === 'ArrowDown' || (!event.shiftKey && event.key === 'Tab')) && menuIndex < this.tabbableElements.length - 1) {
+      if (
+        (event.key === 'ArrowDown' ||
+          (!event.shiftKey && event.key === 'Tab')) &&
+        menuIndex < this.tabbableElements.length - 1
+      ) {
         menuIndex++;
       }
 
@@ -116,7 +137,11 @@ export default class Dropdown extends LitElement {
       }
 
       this.tabbableElements[menuIndex].focus();
-    } else if (event.key === 'Enter' && this.open && this.dropdownContent.contains(event.target)) {
+    } else if (
+      event.key === 'Enter' &&
+      this.open &&
+      this.dropdownContent.contains(event.target)
+    ) {
       this.closeAndRefocus();
     }
   }
@@ -131,7 +156,11 @@ export default class Dropdown extends LitElement {
     }
 
     // Close dropdown if click event is on dropdown content element that is anchor or button element
-    if (this.open && path.includes(this.dropdownContent) && ['a', 'button'].includes(targetTagName)) {
+    if (
+      this.open &&
+      path.includes(this.dropdownContent) &&
+      ['a', 'button'].includes(targetTagName)
+    ) {
       this.closeAndRefocus();
     }
   }
@@ -153,7 +182,6 @@ export default class Dropdown extends LitElement {
   }
 
   handleTriggerKeyDown(event) {
-
     if (event.key === 'Escape') {
       this.closeAndRefocus();
     } else if ([' ', 'Enter'].includes(event.key)) {
@@ -182,7 +210,6 @@ export default class Dropdown extends LitElement {
   }
 
   setCaretPosition(dropdownPlacement, middlewareData) {
-
     const {x: arrowX, y: arrowY} = middlewareData.arrow;
     const staticSide = {
       top: 'bottom',
@@ -194,7 +221,10 @@ export default class Dropdown extends LitElement {
     const arrowXcorrection = staticSide === 'bottom' ? arrowX + 9 : arrowX - 9;
 
     Object.assign(this.caretElement.style, {
-      left: arrowX != null ? `${this.offsetHorizontal ? arrowX : arrowXcorrection}px` : '',
+      left:
+        arrowX != null
+          ? `${this.offsetHorizontal ? arrowX : arrowXcorrection}px`
+          : '',
       top: arrowY != null ? `${arrowY}px` : '',
       right: '',
       bottom: '',
@@ -207,28 +237,33 @@ export default class Dropdown extends LitElement {
     if (!this.open || !this.trigger || !this.dropdownContent) return;
 
     const middlewareFunctions = [
-      offset({ mainAxis: this.offsetVertical, crossAxis: this.offsetHorizontal }),
+      offset({mainAxis: this.offsetVertical, crossAxis: this.offsetHorizontal}),
       flip(),
-      shift({ padding: 16 }),
+      shift({padding: 16}),
       size({
-        apply: ({ width, height }) => {
+        apply: ({width, height}) => {
           Object.assign(this.dropdownContent.style, {
             maxWidth: `${width}px`,
             maxHeight: `${height}px`,
-            overflow: this.dropdownContentElement.offsetHeight > height ? 'auto' : 'unset'
+            overflow:
+              this.dropdownContentElement.offsetHeight > height
+                ? 'auto'
+                : 'unset',
           });
         },
-        padding: 16
+        padding: 16,
       }),
     ];
 
     if (this.caret) {
-      middlewareFunctions.push(arrow({
-        element: this.caretElement,
-        // This describes the padding between the arrow and the edges of the floating element.
-        // If your floating element has border-radius, this will prevent it from overflowing the corners.
-        padding: 4
-      }));
+      middlewareFunctions.push(
+        arrow({
+          element: this.caretElement,
+          // This describes the padding between the arrow and the edges of the floating element.
+          // If your floating element has border-radius, this will prevent it from overflowing the corners.
+          padding: 4,
+        })
+      );
     }
 
     computePosition(this.trigger, this.dropdownContent, {
@@ -246,7 +281,11 @@ export default class Dropdown extends LitElement {
   startPositioner() {
     this.stopPositioner();
     this.updatePositioner();
-    this.positionerCleanup = autoUpdate(this.trigger, this.dropdownContent, this.updatePositioner.bind(this));
+    this.positionerCleanup = autoUpdate(
+      this.trigger,
+      this.dropdownContent,
+      this.updatePositioner.bind(this)
+    );
   }
 
   stopPositioner() {
@@ -282,27 +321,26 @@ export default class Dropdown extends LitElement {
   render() {
     return html`
       <div class="dropdown">
-
         <span
           class="dropdown-trigger"
           @click=${this.handleTriggerClick}
           @keydown=${this.handleTriggerKeyDown}
           @keyup=${this.handleTriggerKeyUp}
         >
-          <slot name="trigger" @slotchange=${this.handleTriggerSlotChange}></slot>
+          <slot
+            name="trigger"
+            @slotchange=${this.handleTriggerSlotChange}
+          ></slot>
         </span>
 
-        <div
-          class="dropdown-content"
-          aria-hidden="${!this.open}"
-        >
+        <div class="dropdown-content" aria-hidden="${!this.open}">
           ${this.caret ? this.renderCaret() : null}
           <slot></slot>
         </div>
-
       </div>
     `;
   }
 }
 
-customElements.get('bu-dropdown') || customElements.define('bu-dropdown', Dropdown);
+customElements.get('bu-dropdown') ||
+  customElements.define('bu-dropdown', Dropdown);

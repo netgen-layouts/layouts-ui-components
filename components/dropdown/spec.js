@@ -1,10 +1,9 @@
-import { fixture, assert } from '@open-wc/testing';
-import { sendKeys } from '@web/test-runner-commands';
-import { html } from 'lit/static-html.js';
+import {fixture, assert} from '@open-wc/testing';
+import {sendKeys} from '@web/test-runner-commands';
+import {html} from 'lit/static-html.js';
 import './element.js';
 
 const createDropdown = async (properties) => {
-
   const element = await fixture(html`
     <bu-dropdown>
       <button slot="trigger">Click</button>
@@ -21,10 +20,9 @@ const createDropdown = async (properties) => {
   }
 
   return element;
-}
+};
 
 describe('bu-dropdown', () => {
-
   it('should be visible with the open attribute', async () => {
     const element = await createDropdown({open: true});
 
@@ -65,12 +63,11 @@ describe('bu-dropdown', () => {
   });
 
   describe('should open dropdown on key press', () => {
-
     it('on Enter', async () => {
       const element = await createDropdown();
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'Enter' });
+      await sendKeys({press: 'Enter'});
       await element.updateComplete;
 
       assert.isTrue(element.open);
@@ -80,7 +77,7 @@ describe('bu-dropdown', () => {
       const element = await createDropdown();
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'Space' });
+      await sendKeys({press: 'Space'});
       await element.updateComplete;
 
       assert.isTrue(element.open);
@@ -90,7 +87,7 @@ describe('bu-dropdown', () => {
       const element = await createDropdown();
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({press: 'ArrowDown'});
       await element.updateComplete;
 
       assert.isTrue(element.open);
@@ -98,12 +95,11 @@ describe('bu-dropdown', () => {
   });
 
   describe('should close dropdown on key press if dropdown was opened, and focus is on trigger element', () => {
-
     it('on Escape', async () => {
       const element = await createDropdown({open: true});
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'Escape' });
+      await sendKeys({press: 'Escape'});
       await element.updateComplete;
 
       assert.isFalse(element.open);
@@ -113,7 +109,7 @@ describe('bu-dropdown', () => {
       const element = await createDropdown({open: true});
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'Enter' });
+      await sendKeys({press: 'Enter'});
       await element.updateComplete;
 
       assert.isFalse(element.open);
@@ -123,7 +119,7 @@ describe('bu-dropdown', () => {
       const element = await createDropdown({open: true});
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'Space' });
+      await sendKeys({press: 'Space'});
       await element.updateComplete;
 
       assert.isFalse(element.open);
@@ -131,7 +127,6 @@ describe('bu-dropdown', () => {
   });
 
   describe('should have accessibility attributes', () => {
-
     it('should have aria-haspopup on trigger', async () => {
       const element = await createDropdown();
 
@@ -142,7 +137,10 @@ describe('bu-dropdown', () => {
       const element = await createDropdown();
       element.triggerElement.click();
 
-      assert.equal(element.triggerElement.getAttribute('aria-expanded'), 'true');
+      assert.equal(
+        element.triggerElement.getAttribute('aria-expanded'),
+        'true'
+      );
     });
 
     it('should have aria-hidden as true if dropdown is not opened', async () => {
@@ -159,18 +157,17 @@ describe('bu-dropdown', () => {
   });
 
   describe('should focus on tabbable element on specific key press', () => {
-
     it('on Tab key press tabbable element should be focused', async () => {
       const element = await createDropdown({open: true});
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'Tab' });
+      await sendKeys({press: 'Tab'});
       await element.updateComplete;
 
       // First tabbable element is focused
       assert.equal(document.activeElement, element.tabbableElements[0]);
 
-      await sendKeys({ press: 'Tab' });
+      await sendKeys({press: 'Tab'});
       await element.updateComplete;
 
       // Second tabbable element is focused
@@ -181,7 +178,7 @@ describe('bu-dropdown', () => {
       const element = await createDropdown({open: true});
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({press: 'ArrowDown'});
       await element.updateComplete;
 
       assert.equal(document.activeElement, element.tabbableElements[0]);
@@ -191,7 +188,7 @@ describe('bu-dropdown', () => {
       const element = await createDropdown({open: true});
       element.tabbableElements[1].focus();
 
-      await sendKeys({ press: 'ArrowUp' });
+      await sendKeys({press: 'ArrowUp'});
       await element.updateComplete;
 
       assert.equal(document.activeElement, element.tabbableElements[0]);
@@ -201,7 +198,7 @@ describe('bu-dropdown', () => {
       const element = await createDropdown({open: true});
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'Home' });
+      await sendKeys({press: 'Home'});
       await element.updateComplete;
 
       assert.equal(document.activeElement, element.tabbableElements[0]);
@@ -211,11 +208,13 @@ describe('bu-dropdown', () => {
       const element = await createDropdown({open: true});
       element.triggerElement.focus();
 
-      await sendKeys({ press: 'End' });
+      await sendKeys({press: 'End'});
       await element.updateComplete;
 
-      assert.equal(document.activeElement, element.tabbableElements[element.tabbableElements.length - 1]);
+      assert.equal(
+        document.activeElement,
+        element.tabbableElements[element.tabbableElements.length - 1]
+      );
     });
   });
-
 });

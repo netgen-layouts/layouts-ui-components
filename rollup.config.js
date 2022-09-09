@@ -48,7 +48,7 @@ export default {
     }),
 
     // Print bundle summary
-    summary({ showGzippedSize: true }),
+    summary({showGzippedSize: true}),
 
     // Optional: copy any static assets to build directory
     copy({

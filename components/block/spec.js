@@ -11,7 +11,9 @@ describe('ngl-block', () => {
   it('default render', async () => {
     const element = await fixture(html`<ngl-block blockId="1"></ngl-block>`);
 
-    assert.shadowDom.equal(element, `
+    assert.shadowDom.equal(
+      element,
+      `
     <main>
       <nav>
         <button>Edit</button>
@@ -21,6 +23,7 @@ describe('ngl-block', () => {
       </nav>
       <slot></slot>
     </main>
-    `);
+    `
+    );
   });
 });

@@ -1,4 +1,4 @@
-import { css } from 'lit';
+import {css} from 'lit';
 
 export default css`
   :host {
@@ -38,7 +38,7 @@ export default css`
   }
 
   .caret:before {
-    content: " ";
+    content: ' ';
     position: absolute;
     top: 0;
     left: 0;
@@ -48,7 +48,7 @@ export default css`
   }
 
   .caret:after {
-    content: " ";
+    content: ' ';
     position: absolute;
     left: 1px;
     top: 1px;

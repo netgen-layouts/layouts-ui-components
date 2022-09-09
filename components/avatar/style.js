@@ -56,13 +56,13 @@ export default css`
     border-radius: 50%;
   }
 
-  :host([layout=md]) {
+  :host([layout='md']) {
     width: var(--avatar-size, var(--md));
     height: var(--avatar-size, var(--md));
     font-size: calc(var(--avatar-size, var(--md)) * 0.4);
   }
 
-  :host([layout=lg]) {
+  :host([layout='lg']) {
     width: var(--avatar-size, var(--lg));
     height: var(--avatar-size, var(--lg));
     font-size: calc(var(--avatar-size, var(--lg)) * 0.4);

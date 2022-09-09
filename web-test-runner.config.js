@@ -6,11 +6,10 @@
 
 import {legacyPlugin} from '@web/dev-server-legacy';
 import {playwrightLauncher} from '@web/test-runner-playwright';
-import { fromRollup } from '@web/dev-server-rollup';
+import {fromRollup} from '@web/dev-server-rollup';
 import rollupReplace from '@rollup/plugin-replace';
 
 const replace = fromRollup(rollupReplace);
-
 
 const mode = process.env.MODE || 'dev';
 if (!['dev', 'prod'].includes(mode)) {

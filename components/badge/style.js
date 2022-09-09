@@ -20,11 +20,11 @@ export default css`
     border-radius: 10px;
   }
 
-  :host([theme=primary]) {
+  :host([theme='primary']) {
     background-color: var(--primary, rgb(13, 110, 253));
   }
 
-  :host([theme=secondary]) {
+  :host([theme='secondary']) {
     background-color: var(--secondary, rgb(50, 157, 125));
   }
 
@@ -36,4 +36,4 @@ export default css`
   :host([showZero][count='0']) {
     display: inline-flex;
   }
-`
+`;
