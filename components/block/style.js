@@ -3,37 +3,39 @@ import {css} from 'lit';
 export default css`
   :host {
     --ngl-block-outline-color: #333;
-    --ngl-block-outline-color-active: #f66;
+    --ngl-block-outline-color-active: #990099;
 
     display: contents;
   }
 
-  ::slotted(.ngl-block) {
-    outline: 2px solid var(--ngl-block-outline-color) !important;
-    outline-offset: 4px;
-  }
-
   :hover ::slotted(.ngl-block) {
-    outline-color: var(--ngl-block-outline-color-active) !important;
+    box-shadow: inset 0px 0px 0px 2px var(--ngl-block-outline-color-active) !important;
   }
 
   main {
     position: relative;
   }
 
-  nav {
+  main.loading {
+    opacity: 0.5;
+  }
+
+  .edit-menu {
+    z-index: 80001;
     display: none;
+    visibility: hidden;
+    opacity: 0;
     position: absolute;
-    right: 0px;
-    top: 0;
     background: #fff;
     border: 1px solid #ccc;
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 4px;
   }
 
-  main:hover nav {
+  main:hover .edit-menu {
     display: block;
+    opacity: 1;
+    visibility: visible;
   }
 
   button {

@@ -9,40 +9,67 @@ export default class Block extends LitElement {
   static styles = [style];
 
   static properties = {
-    blockId: {type: Number},
+    blockId: {type: String, attribute: 'data-ngl-block-id'},
   };
 
+  constructor() {
+    super();
+
+    this.isSaveListenerAttached = false;
+  }
+
+  getBlock() {
+    return window.parent.Core.g.layout.blocks.findWhere({id: this.blockId});
+  }
+
   renderMenu() {
-    return html`
-      <nav>
-        <button @click=${this.edit}>Edit</button>
-        <button @click=${this.moveUp}>Move Up</button>
-        <button @click=${this.moveDown}>Move Down</button>
-        <button @click=${this.delete}>Delete</button>
-      </nav>
-    `;
+    const block = this.getBlock();
+    const isInLinkedZone = block.zone().is_linked();
+
+    if (isInLinkedZone) {
+      return html`
+        <div class="edit-menu">
+          <button @click=${this.refresh}>Refresh</button>
+        </div>
+      `;
+    } else {
+      const parentId = block.attributes.parent_block_id;
+      const parent = document.querySelector(
+        `ngl-block[data-ngl-block-id="${parentId}"]`
+      );
+
+      if (parent && isBlock(parent)) {
+        return html`
+          <div class="edit-menu">
+            <button @click=${parent.edit.bind(parent)}>Edit container</button>
+            <button @click=${parent.refresh.bind(parent)}>
+              Refresh container
+            </button>
+            <button @click=${this.edit}>Edit</button>
+            <button @click=${this.refresh}>Refresh</button>
+          </div>
+        `;
+      } else {
+        return html`
+          <div class="edit-menu">
+            <button @click=${this.edit}>Edit</button>
+            <button @click=${this.refresh}>Refresh</button>
+          </div>
+        `;
+      }
+    }
   }
 
-  edit(e) {
-    console.log(e.target.innerText);
-    this.refresh();
-  }
+  edit() {
+    const block = this.getBlock();
+    block.trigger('edit');
 
-  delete(e) {
-    console.log(e.target.innerText);
-    this.remove();
-  }
-
-  moveUp(e) {
-    console.log(e.target.innerText);
-    const prevElement = this.previousElementSibling;
-    isBlock(prevElement) && this.parentNode.insertBefore(this, prevElement);
-  }
-
-  moveDown(e) {
-    console.log(e.target.innerText);
-    const nextElement = this.nextElementSibling;
-    isBlock(nextElement) && this.parentNode.insertBefore(nextElement, this);
+    if (!this.isSaveListenerAttached) {
+      block.on('sidebar_save:success', () => {
+        this.refresh();
+      });
+      this.isSaveListenerAttached = true;
+    }
   }
 
   async fetch() {
@@ -50,18 +77,25 @@ export default class Block extends LitElement {
     return resp.text();
   }
 
+  get main() {
+    return this.shadowRoot.querySelector('main');
+  }
+
   async refresh() {
+    this.main.classList.add('loading');
     let html = await this.fetch();
+    this.main.classList.remove('loading');
     const template = document.createElement('template');
     template.innerHTML = html;
     const currentBlockHtml = template.content.querySelector(
-      `ngl-block[blockId="${this.blockId}"]`
+      `ngl-block[data-ngl-block-id="${this.blockId}"]`
     );
 
-    // Simulate text change
-    currentBlockHtml.querySelector('.timestamp').innerText =
-      new Date().toLocaleTimeString();
     this.innerHTML = currentBlockHtml.innerHTML;
+
+    this.dispatchEvent(
+      new Event('ngl:refresh', {bubbles: true, composed: true})
+    );
   }
 
   render() {
