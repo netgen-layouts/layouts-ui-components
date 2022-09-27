@@ -1,8 +1,8 @@
 {
-  "name": "@netgen-layouts/ngl-components",
+  "name": "@netgen/layouts-ui-components",
   "private": true,
   "version": "1.0.0",
-  "description": "Netgen Layouts - Frontend components",
+  "description": "Netgen Layouts UI frontend components",
   "main": "components.js",
   "module": "components.js",
   "type": "module",
@@ -30,7 +30,7 @@
     "lit"
   ],
   "author": "Marko Žabčić <marko@effectiva.hr>",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "dependencies": {
     "@floating-ui/dom": "^0.4.4",
     "lit": "^2.1.0"
@@ -74,10 +74,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/netgen-layouts/ngl-components.git"
-  },
-  "bugs": {
-    "url": "https://github.com/netgen-layouts/ngl-components/issues"
-  },
-  "homepage": "https://github.com/netgen-layouts/ngl-components#readme"
+    "url": "https://github.com/netgen-layouts/layouts-ui-components.git"
+  }
 }
