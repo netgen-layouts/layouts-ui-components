@@ -36,17 +36,14 @@ export default class Block extends LitElement {
     }));
   }
 
-  get parentModel() {
-    if (this.cached_parent_model !== undefined) return this.cached_parent_model;
+  get parent() {
+    if (this.cached_parent !== undefined) return this.cached_parent;
 
     const parentId = this.model.attributes.parent_block_id;
-    const parentModel = document.querySelector(
-      `ngl-block[blockId="${parentId}"]`
-    );
+    const parent = document.querySelector(`ngl-block[blockId="${parentId}"]`);
 
-    if (parentModel && isBlock(parentModel))
-      return (this.cached_parent_model = parentModel);
-    else return (this.cached_parent_model = null);
+    if (parent) return (this.cached_parent = parent);
+    else return (this.cached_parent = null);
   }
 
   get isInLinkedZone() {
@@ -55,44 +52,35 @@ export default class Block extends LitElement {
 
   renderMenu() {
     if (this.isInLinkedZone) return this.renderLinkedBlockMenu();
-    else if (this.parentModel) return this.renderInnerBlockMenu();
+    else if (this.parent) return this.renderInnerBlockMenu();
     else return this.renderOuterBlockMenu();
   }
 
   renderLinkedBlockMenu() {
-    return html`
-      <div class="edit-menu">
-        <button @click=${this.refresh}>Refresh</button>
-      </div>
-    `;
+    return html` <button @click=${this.refresh}>Refresh</button> `;
   }
 
   renderInnerBlockMenu() {
     return html`
-      <div class="edit-menu">
-        <button @click=${this.parentModel.edit.bind(this.parentModel)}>
-          Edit container
-        </button>
-        <button @click=${this.parentModel.refresh.bind(this.parentModel)}>
-          Refresh container
-        </button>
-        <button @click=${this.edit}>Edit</button>
-        <button @click=${this.refresh}>Refresh</button>
-      </div>
+      ${this.renderOuterBlockMenu()}
+      <button @click=${this.parentEdit}>Edit container</button>
+      <button @click=${this.parentRefresh}>Refresh container</button>
     `;
   }
 
   renderOuterBlockMenu() {
     return html`
-      <div class="edit-menu">
-        <button @click=${this.edit}>Edit</button>
-        <button @click=${this.refresh}>Refresh</button>
-      </div>
+      <button @click=${this.edit}>Edit</button>
+      <button @click=${this.refresh}>Refresh</button>
     `;
   }
 
   edit() {
     this.model.trigger('edit');
+  }
+
+  parentEdit() {
+    this.parent.edit();
   }
 
   async fetch() {
@@ -118,12 +106,16 @@ export default class Block extends LitElement {
     );
   }
 
+  async parentRefresh() {
+    await this.parent.refresh();
+  }
+
   render() {
     const classes = {loading: this.loading};
 
     return html`
       <main class=${classMap(classes)}>
-        ${this.renderMenu()}
+        <div class="edit-menu">${this.renderMenu()}</div>
         <slot></slot>
       </main>
     `;
