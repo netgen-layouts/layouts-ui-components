@@ -22,7 +22,8 @@ describe('ngl-block', () => {
             <button>Delete</button>
           </nav>
           <slot></slot>
-        </main>`
+        </main>
+      `
     );
   });
 });
