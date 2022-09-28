@@ -1,4 +1,5 @@
 import {LitElement, html} from 'lit';
+import {classMap} from 'lit/directives/class-map.js';
 import style from './style.js';
 
 function isBlock(element) {
@@ -9,8 +10,15 @@ export default class Block extends LitElement {
   static styles = [style];
 
   static properties = {
+    loading: {type: Boolean, state: true},
     blockId: {type: String, attribute: 'data-ngl-block-id'},
   };
+
+  constructor() {
+    super();
+
+    this.loading = false;
+  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -88,18 +96,15 @@ export default class Block extends LitElement {
   }
 
   async fetch() {
+    this.loading = true;
     const resp = await fetch(window.location.href);
+    this.loading = false;
     return resp.text();
   }
 
-  get main() {
-    return this.shadowRoot.querySelector('main');
-  }
-
   async refresh() {
-    this.main.classList.add('loading');
     let html = await this.fetch();
-    this.main.classList.remove('loading');
+
     const template = document.createElement('template');
     template.innerHTML = html;
     const currentBlockHtml = template.content.querySelector(
@@ -114,8 +119,10 @@ export default class Block extends LitElement {
   }
 
   render() {
+    const classes = {loading: this.loading};
+
     return html`
-      <main>
+      <main class=${classMap(classes)}>
         ${this.renderMenu()}
         <slot></slot>
       </main>
