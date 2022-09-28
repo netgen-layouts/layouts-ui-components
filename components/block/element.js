@@ -11,7 +11,7 @@ export default class Block extends LitElement {
 
   static properties = {
     loading: {type: Boolean, state: true},
-    blockId: {type: String, attribute: 'data-ngl-block-id'},
+    blockId: {type: String},
   };
 
   constructor() {
@@ -41,7 +41,7 @@ export default class Block extends LitElement {
 
     const parentId = this.model.attributes.parent_block_id;
     const parentModel = document.querySelector(
-      `ngl-block[data-ngl-block-id="${parentId}"]`
+      `ngl-block[blockId="${parentId}"]`
     );
 
     if (parentModel && isBlock(parentModel))
@@ -108,7 +108,7 @@ export default class Block extends LitElement {
     const template = document.createElement('template');
     template.innerHTML = html;
     const currentBlockHtml = template.content.querySelector(
-      `ngl-block[data-ngl-block-id="${this.blockId}"]`
+      `ngl-block[blockId="${this.blockId}"]`
     );
 
     this.innerHTML = currentBlockHtml.innerHTML;
