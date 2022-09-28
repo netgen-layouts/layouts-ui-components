@@ -23,20 +23,22 @@ export default class Block extends LitElement {
   }
 
   get model() {
-    return this.cached_model ||= this.layout.blocks.findWhere({id: this.blockId});
+    return (this.cached_model ||= this.layout.blocks.findWhere({
+      id: this.blockId,
+    }));
   }
 
   get parentModel() {
-    if (this.cached_parent_model !== undefined)
-      return this.cached_parent_model;
+    if (this.cached_parent_model !== undefined) return this.cached_parent_model;
 
     const parentId = this.model.attributes.parent_block_id;
-    const parentModel = document.querySelector(`ngl-block[data-ngl-block-id="${parentId}"]`);
+    const parentModel = document.querySelector(
+      `ngl-block[data-ngl-block-id="${parentId}"]`
+    );
 
     if (parentModel && isBlock(parentModel))
-      return this.cached_parent_model = parentModel;
-     else
-      return this.cached_parent_model = null;
+      return (this.cached_parent_model = parentModel);
+    else return (this.cached_parent_model = null);
   }
 
   get isInLinkedZone() {
@@ -44,12 +46,9 @@ export default class Block extends LitElement {
   }
 
   renderMenu() {
-    if (this.isInLinkedZone)
-      return this.renderLinkedBlockMenu();
-    else if (this.parentModel)
-      return this.renderInnerBlockMenu();
-    else
-      return this.renderOuterBlockMenu();
+    if (this.isInLinkedZone) return this.renderLinkedBlockMenu();
+    else if (this.parentModel) return this.renderInnerBlockMenu();
+    else return this.renderOuterBlockMenu();
   }
 
   renderLinkedBlockMenu() {
@@ -63,8 +62,12 @@ export default class Block extends LitElement {
   renderInnerBlockMenu() {
     return html`
       <div class="edit-menu">
-        <button @click=${this.parentModel.edit.bind(this.parentModel)}>Edit container</button>
-        <button @click=${this.parentModel.refresh.bind(this.parentModel)}>Refresh container</button>
+        <button @click=${this.parentModel.edit.bind(this.parentModel)}>
+          Edit container
+        </button>
+        <button @click=${this.parentModel.refresh.bind(this.parentModel)}>
+          Refresh container
+        </button>
         <button @click=${this.edit}>Edit</button>
         <button @click=${this.refresh}>Refresh</button>
       </div>
