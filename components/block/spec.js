@@ -14,16 +14,15 @@ describe('ngl-block', () => {
     assert.shadowDom.equal(
       element,
       `
-    <main>
-      <nav>
-        <button>Edit</button>
-        <button>Move Up</button>
-        <button>Move Down</button>
-        <button>Delete</button>
-      </nav>
-      <slot></slot>
-    </main>
-    `
+        <main>
+          <nav>
+            <button>Edit</button>
+            <button>Move Up</button>
+            <button>Move Down</button>
+            <button>Delete</button>
+          </nav>
+          <slot></slot>
+        </main>`
     );
   });
 });
