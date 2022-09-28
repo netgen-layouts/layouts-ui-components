@@ -12,10 +12,10 @@ export default class Block extends LitElement {
     blockId: {type: String, attribute: 'data-ngl-block-id'},
   };
 
-  constructor() {
-    super();
+  connectedCallback() {
+    super.connectedCallback();
 
-    this.isSaveListenerAttached = false;
+    this.model.on('sidebar_save:success', this.refresh.bind(this));
   }
 
   get layout() {
@@ -85,13 +85,6 @@ export default class Block extends LitElement {
 
   edit() {
     this.model.trigger('edit');
-
-    if (!this.isSaveListenerAttached) {
-      this.model.on('sidebar_save:success', () => {
-        this.refresh();
-      });
-      this.isSaveListenerAttached = true;
-    }
   }
 
   async fetch() {
