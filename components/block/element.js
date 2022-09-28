@@ -18,54 +18,73 @@ export default class Block extends LitElement {
     this.isSaveListenerAttached = false;
   }
 
-  getBlock() {
-    return window.parent.Core.g.layout.blocks.findWhere({id: this.blockId});
+  get layout() {
+    return window.parent.Core.g.layout;
+  }
+
+  get model() {
+    return this.cached_model ||= this.layout.blocks.findWhere({id: this.blockId});
+  }
+
+  get parentModel() {
+    if (this.cached_parent_model !== undefined)
+      return this.cached_parent_model;
+
+    const parentId = this.model.attributes.parent_block_id;
+    const parentModel = document.querySelector(`ngl-block[data-ngl-block-id="${parentId}"]`);
+
+    if (parentModel && isBlock(parentModel))
+      return this.cached_parent_model = parentModel;
+     else
+      return this.cached_parent_model = null;
+  }
+
+  get isInLinkedZone() {
+    return this.model.zone().is_linked();
   }
 
   renderMenu() {
-    const block = this.getBlock();
-    const isInLinkedZone = block.zone().is_linked();
+    if (this.isInLinkedZone)
+      return this.renderLinkedBlockMenu();
+    else if (this.parentModel)
+      return this.renderInnerBlockMenu();
+    else
+      return this.renderOuterBlockMenu();
+  }
 
-    if (isInLinkedZone) {
-      return html`
-        <div class="edit-menu">
-          <button @click=${this.refresh}>Refresh</button>
-        </div>
-      `;
-    } else {
-      const parentId = block.attributes.parent_block_id;
-      const parent = document.querySelector(
-        `ngl-block[data-ngl-block-id="${parentId}"]`
-      );
+  renderLinkedBlockMenu() {
+    return html`
+      <div class="edit-menu">
+        <button @click=${this.refresh}>Refresh</button>
+      </div>
+    `;
+  }
 
-      if (parent && isBlock(parent)) {
-        return html`
-          <div class="edit-menu">
-            <button @click=${parent.edit.bind(parent)}>Edit container</button>
-            <button @click=${parent.refresh.bind(parent)}>
-              Refresh container
-            </button>
-            <button @click=${this.edit}>Edit</button>
-            <button @click=${this.refresh}>Refresh</button>
-          </div>
-        `;
-      } else {
-        return html`
-          <div class="edit-menu">
-            <button @click=${this.edit}>Edit</button>
-            <button @click=${this.refresh}>Refresh</button>
-          </div>
-        `;
-      }
-    }
+  renderInnerBlockMenu() {
+    return html`
+      <div class="edit-menu">
+        <button @click=${this.parentModel.edit.bind(this.parentModel)}>Edit container</button>
+        <button @click=${this.parentModel.refresh.bind(this.parentModel)}>Refresh container</button>
+        <button @click=${this.edit}>Edit</button>
+        <button @click=${this.refresh}>Refresh</button>
+      </div>
+    `;
+  }
+
+  renderOuterBlockMenu() {
+    return html`
+      <div class="edit-menu">
+        <button @click=${this.edit}>Edit</button>
+        <button @click=${this.refresh}>Refresh</button>
+      </div>
+    `;
   }
 
   edit() {
-    const block = this.getBlock();
-    block.trigger('edit');
+    this.model.trigger('edit');
 
     if (!this.isSaveListenerAttached) {
-      block.on('sidebar_save:success', () => {
+      this.model.on('sidebar_save:success', () => {
         this.refresh();
       });
       this.isSaveListenerAttached = true;
