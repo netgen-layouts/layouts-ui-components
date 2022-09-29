@@ -2,10 +2,6 @@ import {LitElement, html} from 'lit';
 import {classMap} from 'lit/directives/class-map.js';
 import style from './style.js';
 
-function isBlock(element) {
-  return element instanceof Block;
-}
-
 export default class Block extends LitElement {
   static styles = [style];
 
@@ -52,12 +48,12 @@ export default class Block extends LitElement {
 
   renderMenu() {
     if (this.isInLinkedZone) return this.renderLinkedBlockMenu();
-    else if (this.parent) return this.renderInnerBlockMenu();
-    else return this.renderOuterBlockMenu();
+    if (this.parent) return this.renderInnerBlockMenu();
+    return this.renderOuterBlockMenu();
   }
 
   renderLinkedBlockMenu() {
-    return html` <button @click=${this.refresh}>Refresh</button> `;
+    return html`<button @click=${this.refresh}>Refresh</button>`;
   }
 
   renderInnerBlockMenu() {
@@ -106,8 +102,8 @@ export default class Block extends LitElement {
     );
   }
 
-  async parentRefresh() {
-    await this.parent.refresh();
+  parentRefresh() {
+    this.parent.refresh();
   }
 
   render() {
