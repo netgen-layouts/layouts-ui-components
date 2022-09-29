@@ -33,13 +33,11 @@ export default class Block extends LitElement {
   }
 
   get parent() {
-    if (this.cached_parent !== undefined) return this.cached_parent;
-
     const parentId = this.model.attributes.parent_block_id;
-    const parent = document.querySelector(`ngl-block[blockId="${parentId}"]`);
+    this.cached_parent ||=
+      parentId && document.querySelector(`ngl-block[blockId="${parentId}"]`);
 
-    if (parent) return (this.cached_parent = parent);
-    else return (this.cached_parent = null);
+    return this.cached_parent;
   }
 
   get isInLinkedZone() {
