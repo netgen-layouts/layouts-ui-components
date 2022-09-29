@@ -19,7 +19,7 @@ export default class Block extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    this.model.on('sidebar_save:success', this.refresh.bind(this));
+    this.model.on('change', this.refresh.bind(this));
   }
 
   get layout() {
