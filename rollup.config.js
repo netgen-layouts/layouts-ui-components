@@ -18,7 +18,7 @@ import replace from '@rollup/plugin-replace';
 const shouldMinify = false;
 
 export default {
-  input: 'components/block/element.js',
+  input: 'components.js',
   // preserveEntrySignatures: 'strict',
   output: {
     name: 'ngl',
@@ -48,7 +48,7 @@ export default {
     }),
 
     // Print bundle summary
-    summary({ showGzippedSize: true }),
+    summary({showGzippedSize: true}),
 
     // Optional: copy any static assets to build directory
     copy({

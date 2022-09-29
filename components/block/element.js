@@ -1,70 +1,115 @@
 import {LitElement, html} from 'lit';
+import {classMap} from 'lit/directives/class-map.js';
 import style from './style.js';
-
-function isBlock(element) {
-  return element instanceof Block;
-}
 
 export default class Block extends LitElement {
   static styles = [style];
 
   static properties = {
-    blockId: { type: Number},
+    loading: {type: Boolean, state: true},
+    blockId: {type: String},
   };
 
-  renderMenu(){
+  constructor() {
+    super();
+
+    this.loading = false;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.model.on('sidebar_save:success', this.refresh.bind(this));
+  }
+
+  get layout() {
+    return window.parent.Core.g.layout;
+  }
+
+  get model() {
+    return (this.cached_model ||= this.layout.blocks.findWhere({
+      id: this.blockId,
+    }));
+  }
+
+  get parent() {
+    const parentId = this.model.attributes.parent_block_id;
+    this.cached_parent ||=
+      parentId && document.querySelector(`ngl-block[blockId="${parentId}"]`);
+
+    return this.cached_parent;
+  }
+
+  get isInLinkedZone() {
+    return this.model.zone().is_linked();
+  }
+
+  renderMenu() {
+    if (this.isInLinkedZone) return this.renderLinkedBlockMenu();
+    if (this.parent) return this.renderInnerBlockMenu();
+    return this.renderOuterBlockMenu();
+  }
+
+  renderLinkedBlockMenu() {
+    return html`<button @click=${this.refresh}>Refresh</button>`;
+  }
+
+  renderInnerBlockMenu() {
     return html`
-      <nav>
-        <button @click=${this.edit}>Edit</button>
-        <button @click=${this.moveUp}>Move Up</button>
-        <button @click=${this.moveDown}>Move Down</button>
-        <button @click=${this.delete}>Delete</button>
-      </nav>
+      ${this.renderOuterBlockMenu()}
+      <button @click=${this.parentEdit}>Edit container</button>
+      <button @click=${this.parentRefresh}>Refresh container</button>
     `;
   }
 
-  edit(e){
-    console.log(e.target.innerText)
-    this.refresh();
+  renderOuterBlockMenu() {
+    return html`
+      <button @click=${this.edit}>Edit</button>
+      <button @click=${this.refresh}>Refresh</button>
+    `;
   }
 
-  delete(e) {
-    console.log(e.target.innerText)
-    this.remove();
+  edit() {
+    this.model.trigger('edit');
   }
 
-  moveUp(e) {
-    console.log(e.target.innerText)
-    const prevElement = this.previousElementSibling;
-    isBlock(prevElement) && this.parentNode.insertBefore(this, prevElement)
-  }
-
-  moveDown(e) {
-    console.log(e.target.innerText)
-    const nextElement = this.nextElementSibling;
-    isBlock(nextElement) && this.parentNode.insertBefore(nextElement, this)
+  parentEdit() {
+    this.parent.edit();
   }
 
   async fetch() {
-    const resp = await fetch(window.location.href)
-    return resp.text()
+    this.loading = true;
+    const resp = await fetch(window.location.href);
+    this.loading = false;
+    return resp.text();
   }
 
   async refresh() {
     let html = await this.fetch();
-    const template = document.createElement('template')
-    template.innerHTML = html;
-    const currentBlockHtml = template.content.querySelector(`ngl-block[blockId="${this.blockId}"]`)
 
-    // Simulate text change
-    currentBlockHtml.querySelector('.timestamp').innerText = new Date().toLocaleTimeString();
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    const currentBlockHtml = template.content.querySelector(
+      `ngl-block[blockId="${this.blockId}"]`
+    );
+
     this.innerHTML = currentBlockHtml.innerHTML;
+
+    this.dispatchEvent(
+      new Event('ngl:refresh', {bubbles: true, composed: true})
+    );
+  }
+
+  parentRefresh() {
+    this.parent.refresh();
   }
 
   render() {
+    const classes = {loading: this.loading};
+
     return html`
-      <main>
-        ${this.renderMenu()}
+      <main class=${classMap(classes)}>
+        <div class="edit-menu">${this.renderMenu()}</div>
         <slot></slot>
       </main>
     `;

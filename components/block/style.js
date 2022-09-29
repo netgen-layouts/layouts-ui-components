@@ -1,55 +1,59 @@
-import { css } from 'lit';
+import {css} from 'lit';
 
 export default css`
   :host {
     --ngl-block-outline-color: #333;
-    --ngl-block-outline-color-active: #f66;
+    --ngl-block-outline-color-active: #990099;
 
-    display:contents;
-  }
-
-  ::slotted(.ngl-block) {
-    outline:2px solid var(--ngl-block-outline-color) !important;
-    outline-offset:4px;
+    display: contents;
   }
 
   :hover ::slotted(.ngl-block) {
-    outline-color: var(--ngl-block-outline-color-active) !important;
+    box-shadow: inset 0px 0px 0px 2px var(--ngl-block-outline-color-active) !important;
   }
 
-  main{
-    position:relative;
+  main {
+    position: relative;
   }
 
-  nav{
+  main.loading {
+    opacity: 0.5;
+  }
+
+  .edit-menu {
+    z-index: 80001;
     display: none;
-    position:absolute;
-    right:0px;
-    top:0;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
     background: #fff;
     border: 1px solid #ccc;
-    padding:5px;
-    border-radius: 5px;
+    padding: 5px;
+    border-radius: 4px;
   }
 
-  main:hover nav {
-    display:block;
+  main:hover .edit-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
   }
 
-  button{
-    background:none;
-    border:none;
-    margin:0;
-    padding:0;
-    margin:0;
+  button {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin: 0;
     border-left: 1px solid #ccc;
     padding: 4px;
-    text-align:center;
+    text-align: center;
   }
-  button:first-child{
+  button:first-child {
     border: none;
-    margin-left:0;
+    margin-left: 0;
   }
 
-  button:hover{background-color: #ccc;}
-`
+  button:hover {
+    background-color: #ccc;
+  }
+`;
