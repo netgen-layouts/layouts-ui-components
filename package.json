@@ -1,36 +1,25 @@
 {
   "name": "@netgen/layouts-ui-components",
-  "private": true,
-  "version": "1.0.0",
   "description": "Netgen Layouts UI frontend components",
+  "license": "MIT",
+  "version": "1.0.0",
+  "contributors": [
+    {
+      "name": "Netgen",
+      "url": "https://netgen.io"
+    },
+    {
+      "name": "Marko Žabčić",
+      "email": "marko@effectiva.hr"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/netgen-layouts/layouts-ui-components.git"
+  },
   "main": "components.js",
   "module": "components.js",
   "type": "module",
-  "scripts": {
-    "build": "rollup -c",
-    "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
-    "lint:eslint": "eslint 'components/**/*.js'",
-    "lint:lit-analyzer": "lit-analyzer components/**/index.js",
-    "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
-    "analyze": "cem analyze --litelement --globs \"**/*.js\" --exclude docs",
-    "analyze:watch": "cem analyze --litelement --globs \"**/*.js\" --exclude docs --watch",
-    "serve": "wds --watch",
-    "serve:prod": "MODE=prod npm run serve",
-    "test": "npm run test:dev && npm run test:prod",
-    "test:dev": "wtr",
-    "test:watch": "wtr --watch",
-    "test:prod": "MODE=prod wtr",
-    "test:prod:watch": "MODE=prod wtr --watch",
-    "checksize": "rollup -c ; cat components.bundled.js | gzip -9 | wc -c ; rm components.bundled.js"
-  },
-  "keywords": [
-    "web-components",
-    "lit-element",
-    "javascript",
-    "lit"
-  ],
-  "author": "Marko Žabčić <marko@effectiva.hr>",
-  "license": "MIT",
   "dependencies": {
     "@floating-ui/dom": "^0.4.4",
     "lit": "^2.1.0"
@@ -68,13 +57,21 @@
     "rollup-plugin-terser": "^7.0.2",
     "sinon": "^14.0.0"
   },
-  "customElements": "custom-elements.json",
-  "directories": {
-    "doc": "docs",
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/netgen-layouts/layouts-ui-components.git"
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
+    "lint:eslint": "eslint 'components/**/*.js'",
+    "lint:lit-analyzer": "lit-analyzer components/**/index.js",
+    "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
+    "analyze": "cem analyze --litelement --globs \"**/*.js\" --exclude docs",
+    "analyze:watch": "cem analyze --litelement --globs \"**/*.js\" --exclude docs --watch",
+    "serve": "wds --watch",
+    "serve:prod": "MODE=prod npm run serve",
+    "test": "npm run test:dev && npm run test:prod",
+    "test:dev": "wtr",
+    "test:watch": "wtr --watch",
+    "test:prod": "MODE=prod wtr",
+    "test:prod:watch": "MODE=prod wtr --watch",
+    "checksize": "rollup -c ; cat components.bundled.js | gzip -9 | wc -c ; rm components.bundled.js"
   }
 }
