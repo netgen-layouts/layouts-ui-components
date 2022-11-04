@@ -59,6 +59,7 @@
   },
   "scripts": {
     "build": "rollup -c",
+    "watch": "rollup -cw",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint 'components/**/*.js'",
     "lint:lit-analyzer": "lit-analyzer components/**/index.js",
