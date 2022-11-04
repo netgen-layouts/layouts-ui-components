@@ -47,7 +47,7 @@ describe('ngl-block', () => {
       },
     });
 
-    const element = await fixture(html`<ngl-block blockId="1"></ngl-block>`);
+    const element = await fixture(html`<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>`);
 
     assert.shadowDom.equal(
       element,
@@ -75,7 +75,7 @@ describe('ngl-block', () => {
       },
     });
 
-    const element = await fixture(html`<ngl-block blockId="1"></ngl-block>`);
+    const element = await fixture(html`<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>`);
 
     assert.shadowDom.equal(
       element,
@@ -102,7 +102,7 @@ describe('ngl-block', () => {
       },
     });
 
-    const element = await fixture(html`<ngl-block blockId="1"></ngl-block>`);
+    const element = await fixture(html`<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>`);
 
     assert.shadowDom.equal(
       element,
@@ -132,12 +132,12 @@ describe('ngl-block', () => {
       },
     });
 
-    const element = await fixture(html`<ngl-block blockId="1"></ngl-block>`);
+    const element = await fixture(html`<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>`);
 
     // Here we stub method fetch to return our test HTML
     sinon
       .stub(element, 'fetch')
-      .resolves('<ngl-block blockId="1">Hello world</ngl-block>');
+      .resolves('<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0">Hello world</ngl-block>');
 
     await element.refresh();
 
