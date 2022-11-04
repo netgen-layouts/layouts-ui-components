@@ -1,59 +1,179 @@
 import {css} from 'lit';
 
 export default css`
-  :host {
-    --ngl-block-outline-color: #333;
-    --ngl-block-outline-color-active: #990099;
+  :host,
+  :after,
+  :before {
 
-    display: contents;
+    --ngl-block-base-z-index: 80000; // was this randomly chosen?
+
+    --ngl-block-priamry-color: #9747FF;
+
+    --ngl-block-outline-color: #333;
+    --ngl-block-outline-color-hover: #990099;
+    --ngl-block-outline-color-selected: #9747FF;
+    --ngl-block-outline-width: .125rem;
+
+    --ngl-block-background-color-selected: rgba(151, 71, 255, 0.1);
+
+    --ngl-block-button-background-color: #9747FF;
+    --ngl-block-button-background-color-hover: #7625DF;
   }
 
-  :hover ::slotted(.ngl-block) {
-    box-shadow: inset 0px 0px 0px 2px var(--ngl-block-outline-color-active) !important;
+  :host {
+    display: contents
   }
 
   main {
     position: relative;
+    /* z-index: 1; */
   }
+
+  /* main main {
+    z-index: 3;
+  } */
 
   main.loading {
     opacity: 0.5;
   }
 
+  main ::slotted(.ngl-block):before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  main ::slotted(.ngl-block):after {
+    content: '';
+    inset: 0;
+    position: absolute;
+    pointer-events: none;
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 1);
+  }
+
+  main.is_selected ::slotted(.ngl-block):before {
+    pointer-events: none;
+    z-index: 2;
+  }
+
+
+  main:not(.is_selected).is_hovered ::slotted(.ngl-block):before {
+    background-color: var(--ngl-block-background-color-selected);
+    z-index: 80000;
+  }
+
+  main:not(.is_selected).is_parent.is_hovered ::slotted(.ngl-block):before {
+    z-index: 0;
+  }
+
+  main.is_selected ::slotted(.ngl-block):after {
+    border: solid var(--ngl-block-outline-width) var(--ngl-block-outline-color-selected);
+  }
+
+  main:not(.is_selected).is_hovered ::slotted(.ngl-block):after {
+    border: solid 1px var(--ngl-block-outline-color-hover);
+
+  }
+
   .edit-menu {
-    z-index: 80001;
+    z-index: calc(var(--ngl-block-base-z-index) + 2);
     display: none;
     visibility: hidden;
     opacity: 0;
     position: absolute;
-    background: #fff;
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 4px;
+    right: 0;
+    bottom: 100%;
+    gap: .25rem;
   }
-
-  main:hover .edit-menu {
-    display: block;
+  main.is_selected .edit-menu,
+  main.is_hovered .edit-menu {
+    display: inline-flex;
     opacity: 1;
     visibility: visible;
   }
 
   button {
-    background: none;
+    --_btn-background-color: var(--ngl-block-button-background-color);
+    background-color: var(--_btn-background-color);
     border: none;
     margin: 0;
-    padding: 0;
-    margin: 0;
-    border-left: 1px solid #ccc;
-    padding: 4px;
+    padding: .125rem .5rem;
+    font-size: .75rem;
+    font-weight: 500;
+    color: #ffffff;
+    gap: .25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    border-radius: .125rem .125rem 0 0;
+    cursor: pointer;
+    position: relative;
   }
-  button:first-child {
-    border: none;
-    margin-left: 0;
+
+  button.refresh-btn {
+    padding-left: .125rem;
+    padding-right: .125rem;
   }
 
   button:hover {
-    background-color: #ccc;
+    --_btn-background-color: var(--ngl-block-button-background-color-hover);
+  }
+
+  .breadcrumbs {
+    position: absolute;
+    bottom: 100%;
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    z-index: calc(var(--ngl-block-base-z-index) + 2);
+  }
+
+  main.is_selected .breadcrumbs {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  main button.breadcrumb-btn {
+    --_btn-background-color:  var(--ngl-block-button-background-color);
+    padding: .25rem .5rem;
+    gap: .25rem;
+    color: #fff;
+    border-radius: .125rem .125rem 0 0;
+  }
+  main button.breadcrumb-btn:not(:last-child):hover {
+    --_btn-background-color: var(--ngl-block-button-background-color-hover);
+  }
+
+  main button.breadcrumb-btn:not(:first-child) {
+    padding-right: .75rem;
+    padding-left: 1.5rem;
+  }
+
+  .breadcrumb-btn > svg {
+    position: absolute;
+    left: calc(100% - 5px);
+    z-index: calc(var(--ngl-block-base-z-index) + 3);
+  }
+
+  .add-btn {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, calc(50% - 2px));
+    padding: .125rem .5rem .125rem .25rem;
+    display: none;
+    opacity: 0;
+    z-index: calc(var(--ngl-block-base-z-index) + 3);
+    visibility: hidden;
+    border-radius: .125rem;
+  }
+
+  main.is_selected .add-btn {
+    display: inline-flex;
+    opacity: 1;
+    visibility: visible;
   }
 `;
