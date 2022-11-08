@@ -240,7 +240,7 @@ export default class Block extends LitElement {
         <div class="edit-menu">${this.renderMenu()}</div>
         ${this.renderBreadcrumbs()}
         <slot @click=${this.selectOnBlockClick}></slot>
-        ${this.renderAddButton()}
+        <!-- Out of scope for current release. Will be added in the next one ${this.renderAddButton()} -->
       </main>
     `;
   }
