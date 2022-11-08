@@ -72,6 +72,7 @@ export default class Block extends LitElement {
   }
 
   formatViewTypeName(name) {
+    if (!Boolean(name)) return;
     return name.replace('_', ' ');
   }
 
