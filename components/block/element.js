@@ -25,8 +25,6 @@ export default class Block extends LitElement {
 
     this.isParent = this.model.attributes.is_container;
 
-    this.model.on('all', console.debug);
-
     this.model.on('change', this.refresh.bind(this));
     this.model.on('sidebar:destroyed', () => (this.isSelected = false));
   }
