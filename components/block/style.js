@@ -4,24 +4,23 @@ export default css`
   :host,
   :after,
   :before {
-
     --ngl-block-base-z-index: 80000; // was this randomly chosen?
 
-    --ngl-block-priamry-color: #9747FF;
+    --ngl-block-priamry-color: #9747ff;
 
     --ngl-block-outline-color: #333;
     --ngl-block-outline-color-hover: #990099;
-    --ngl-block-outline-color-selected: #9747FF;
-    --ngl-block-outline-width: .125rem;
+    --ngl-block-outline-color-selected: #9747ff;
+    --ngl-block-outline-width: 0.125rem;
 
     --ngl-block-background-color-selected: rgba(151, 71, 255, 0.1);
 
-    --ngl-block-button-background-color: #9747FF;
-    --ngl-block-button-background-color-hover: #7625DF;
+    --ngl-block-button-background-color: #9747ff;
+    --ngl-block-button-background-color-hover: #7625df;
   }
 
   :host {
-    display: contents
+    display: contents;
   }
 
   main {
@@ -57,7 +56,6 @@ export default css`
     z-index: 2;
   }
 
-
   main:not(.is_selected).is_hovered ::slotted(.ngl-block):before {
     background-color: var(--ngl-block-background-color-selected);
     z-index: 80000;
@@ -68,12 +66,12 @@ export default css`
   }
 
   main.is_selected ::slotted(.ngl-block):after {
-    border: solid var(--ngl-block-outline-width) var(--ngl-block-outline-color-selected);
+    border: solid var(--ngl-block-outline-width)
+      var(--ngl-block-outline-color-selected);
   }
 
   main:not(.is_selected).is_hovered ::slotted(.ngl-block):after {
     border: solid 1px var(--ngl-block-outline-color-hover);
-
   }
 
   .edit-menu {
@@ -84,7 +82,7 @@ export default css`
     position: absolute;
     right: 0;
     bottom: 100%;
-    gap: .25rem;
+    gap: 0.25rem;
   }
   main.is_selected .edit-menu,
   main.is_hovered .edit-menu {
@@ -98,23 +96,23 @@ export default css`
     background-color: var(--_btn-background-color);
     border: none;
     margin: 0;
-    padding: .125rem .5rem;
-    font-size: .75rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
     font-weight: 500;
     color: #ffffff;
-    gap: .25rem;
+    gap: 0.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    border-radius: .125rem .125rem 0 0;
+    border-radius: 0.125rem 0.125rem 0 0;
     cursor: pointer;
     position: relative;
   }
 
   button.refresh-btn {
-    padding-left: .125rem;
-    padding-right: .125rem;
+    padding-left: 0.125rem;
+    padding-right: 0.125rem;
   }
 
   button:hover {
@@ -137,18 +135,18 @@ export default css`
   }
 
   main button.breadcrumb-btn {
-    --_btn-background-color:  var(--ngl-block-button-background-color);
-    padding: .25rem .5rem;
-    gap: .25rem;
+    --_btn-background-color: var(--ngl-block-button-background-color);
+    padding: 0.25rem 0.5rem;
+    gap: 0.25rem;
     color: #fff;
-    border-radius: .125rem .125rem 0 0;
+    border-radius: 0.125rem 0.125rem 0 0;
   }
   main button.breadcrumb-btn:not(:last-child):hover {
     --_btn-background-color: var(--ngl-block-button-background-color-hover);
   }
 
   main button.breadcrumb-btn:not(:first-child) {
-    padding-right: .75rem;
+    padding-right: 0.75rem;
     padding-left: 1.5rem;
   }
 
@@ -163,12 +161,12 @@ export default css`
     bottom: 0;
     left: 50%;
     transform: translate(-50%, calc(50% - 2px));
-    padding: .125rem .5rem .125rem .25rem;
+    padding: 0.125rem 0.5rem 0.125rem 0.25rem;
     display: none;
     opacity: 0;
     z-index: calc(var(--ngl-block-base-z-index) + 3);
     visibility: hidden;
-    border-radius: .125rem;
+    border-radius: 0.125rem;
   }
 
   main.is_selected .add-btn {

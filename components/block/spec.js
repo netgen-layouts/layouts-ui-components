@@ -47,15 +47,27 @@ describe('ngl-block', () => {
       },
     });
 
-    const element = await fixture(html`<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>`);
+    const element = await fixture(
+      html`<ngl-block
+        blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"
+      ></ngl-block>`
+    );
 
     assert.shadowDom.equal(
       element,
       `
         <main>
           <div class="edit-menu">
-            <button>Edit</button>
-            <button>Refresh</button>
+            <button>
+              <span>Select</span>
+            </button>
+            <button class="refresh-btn">
+            </button>
+          </div>
+          <div class="breadcrumbs">
+            <button class="breadcrumb-btn">
+              <span></span>
+            </button>
           </div>
           <slot></slot>
         </main>
@@ -75,14 +87,18 @@ describe('ngl-block', () => {
       },
     });
 
-    const element = await fixture(html`<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>`);
+    const element = await fixture(
+      html`<ngl-block
+        blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"
+      ></ngl-block>`
+    );
 
     assert.shadowDom.equal(
       element,
       `
         <main>
           <div class="edit-menu">
-            <button>Refresh</button>
+            <button class="refresh-btn"></button>
           </div>
           <slot></slot>
         </main>
@@ -102,17 +118,30 @@ describe('ngl-block', () => {
       },
     });
 
-    const element = await fixture(html`<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>`);
+    const element = await fixture(
+      html`<ngl-block
+        blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"
+      ></ngl-block>`
+    );
 
     assert.shadowDom.equal(
       element,
       `
         <main>
           <div class="edit-menu">
-          <button>Edit</button>
-          <button>Refresh</button>
-          <button>Edit container</button>
-          <button>Refresh container</button>
+            <button>
+              <span>Select</span>
+            </button>
+            <button class="refresh-btn">
+            </button>
+          </div>
+          <div class="breadcrumbs">
+            <button class="breadcrumb-btn">
+              <span></span>
+            </button>
+            <button class="breadcrumb-btn">
+              <span></span>
+            </button>
           </div>
           <slot></slot>
         </main>
@@ -132,12 +161,18 @@ describe('ngl-block', () => {
       },
     });
 
-    const element = await fixture(html`<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>`);
+    const element = await fixture(
+      html`<ngl-block
+        blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"
+      ></ngl-block>`
+    );
 
     // Here we stub method fetch to return our test HTML
     sinon
       .stub(element, 'fetch')
-      .resolves('<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0">Hello world</ngl-block>');
+      .resolves(
+        '<ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0">Hello world</ngl-block>'
+      );
 
     await element.refresh();
 
