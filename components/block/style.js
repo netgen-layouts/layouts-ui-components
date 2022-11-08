@@ -140,6 +140,7 @@ export default css`
     gap: 0.25rem;
     color: #fff;
     border-radius: 0.125rem 0.125rem 0 0;
+    text-transform: capitalize;
   }
   main button.breadcrumb-btn:not(:last-child):hover {
     --_btn-background-color: var(--ngl-block-button-background-color-hover);

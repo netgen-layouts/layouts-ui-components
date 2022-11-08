@@ -8,7 +8,6 @@ export default class Block extends LitElement {
   static properties = {
     loading: {type: Boolean, state: true},
     blockId: {type: String},
-    templateName: {type: String},
     isSelected: {type: Boolean, state: true},
     isHovered: {type: Boolean, state: true},
     isParent: {type: Boolean, state: true},
@@ -51,8 +50,27 @@ export default class Block extends LitElement {
     return this.cached_parent;
   }
 
+  get parentName() {
+    if(!Boolean(this.parent)) return;
+
+    const parentId = this.model.attributes.parent_block_id;
+    const parentObject = this.layout.blocks.findWhere({
+      id: parentId,
+    })
+
+    return this.formatViewTypeName(parentObject.attributes.definition_identifier);
+  }
+
+  get viewTypeName() {
+    return this.formatViewTypeName(this.model.attributes.definition_identifier)
+  }
+
   get isInLinkedZone() {
     return this.model.zone().is_linked();
+  }
+
+  formatViewTypeName(name) {
+    return name.replace('_', ' ')
   }
 
   deselectIcon() {
@@ -162,7 +180,7 @@ export default class Block extends LitElement {
   renderInnerBlokcBreadcrumbs() {
     return html`
         <button class="breadcrumb-btn" @click=${this.parentSelect}>
-          <span>${this.parent.getAttribute('templatename')}</span>
+          <span>${this.parentName}</span>
           ${this.breadcrumbArrowIcon()}
         </button>
         ${this.renderOuterBlokcBreadcrumbs()}
@@ -173,7 +191,7 @@ export default class Block extends LitElement {
   renderOuterBlokcBreadcrumbs() {
     return html`
       <button class="breadcrumb-btn" @click=${this.select}>
-        <span>${this.templateName}</span>
+        <span>${this.viewTypeName}</span>
       </button>
     `;
   }
@@ -238,6 +256,9 @@ export default class Block extends LitElement {
   }
 
   select() {
+    console.debug(this.model, this.parent, this.layout.blocks.findWhere({
+      id: this.model.attributes.parent_block_id,
+    }))
     if (this.isInLinkedZone) return;
 
     this.model.trigger('edit');
@@ -302,7 +323,6 @@ export default class Block extends LitElement {
     const classes = {
       loading: this.loading,
       is_selected: this.isSelected,
-      is_child: Boolean(this.parent),
       is_hovered: this.isHovered,
       is_parent: this.isParent,
     };
