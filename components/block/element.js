@@ -51,18 +51,20 @@ export default class Block extends LitElement {
   }
 
   get parentName() {
-    if(!Boolean(this.parent)) return;
+    if (!Boolean(this.parent)) return;
 
     const parentId = this.model.attributes.parent_block_id;
     const parentObject = this.layout.blocks.findWhere({
       id: parentId,
-    })
+    });
 
-    return this.formatViewTypeName(parentObject.attributes.definition_identifier);
+    return this.formatViewTypeName(
+      parentObject.attributes.definition_identifier
+    );
   }
 
   get viewTypeName() {
-    return this.formatViewTypeName(this.model.attributes.definition_identifier)
+    return this.formatViewTypeName(this.model.attributes.definition_identifier);
   }
 
   get isInLinkedZone() {
@@ -70,7 +72,7 @@ export default class Block extends LitElement {
   }
 
   formatViewTypeName(name) {
-    return name.replace('_', ' ')
+    return name.replace('_', ' ');
   }
 
   deselectIcon() {
@@ -256,9 +258,6 @@ export default class Block extends LitElement {
   }
 
   select() {
-    console.debug(this.model, this.parent, this.layout.blocks.findWhere({
-      id: this.model.attributes.parent_block_id,
-    }))
     if (this.isInLinkedZone) return;
 
     this.model.trigger('edit');
