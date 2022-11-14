@@ -8,6 +8,7 @@ export default class Block extends LitElement {
   static properties = {
     loading: {type: Boolean, state: true},
     blockId: {type: String},
+    viewTypeName: {type: String},
     isSelected: {type: Boolean, state: true},
     isHovered: {type: Boolean, state: true},
     isParent: {type: Boolean, state: true},
@@ -53,27 +54,11 @@ export default class Block extends LitElement {
   get parentName() {
     if (!this.parent) return;
 
-    const parentId = this.model.attributes.parent_block_id;
-    const parentObject = this.layout.blocks.findWhere({
-      id: parentId,
-    });
-
-    return this.formatViewTypeName(
-      parentObject.attributes.definition_identifier
-    );
-  }
-
-  get viewTypeName() {
-    return this.formatViewTypeName(this.model.attributes.definition_identifier);
+    return this.parent.getAttribute('viewTypeName')
   }
 
   get isInLinkedZone() {
     return this.model.zone().is_linked();
-  }
-
-  formatViewTypeName(name) {
-    if (!name) return;
-    return name.replace('_', ' ');
   }
 
   deselectIcon() {
