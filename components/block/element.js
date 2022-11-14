@@ -51,7 +51,7 @@ export default class Block extends LitElement {
   }
 
   get parentName() {
-    if (!Boolean(this.parent)) return;
+    if (!this.parent) return;
 
     const parentId = this.model.attributes.parent_block_id;
     const parentObject = this.layout.blocks.findWhere({
@@ -72,7 +72,7 @@ export default class Block extends LitElement {
   }
 
   formatViewTypeName(name) {
-    if (!Boolean(name)) return;
+    if (!name) return;
     return name.replace('_', ' ');
   }
 
@@ -148,9 +148,11 @@ export default class Block extends LitElement {
   }
 
   renderLinkedBlockMenu() {
-    return html` <button class="refresh-btn" @click=${this.refresh}>
-      ${this.refreshIcon()}
-    </button>`;
+    return html`
+      <button class="refresh-btn" @click=${this.refresh}>
+        ${this.refreshIcon()}
+      </button>
+    `;
   }
 
   renderOuterBlockMenu() {
