@@ -21,6 +21,10 @@ export default class Block extends LitElement {
   }
 
   connectedCallback() {
+    if (typeof window.parent.Core === 'undefined') {
+      return;
+    }
+
     super.connectedCallback();
 
     this.isParent = this.model.attributes.is_container;
