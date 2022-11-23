@@ -302,7 +302,7 @@ export default class Block extends LitElement {
     this.innerHTML = currentBlockHtml.innerHTML;
 
     this.dispatchEvent(
-      new Event('ngl:refresh', {bubbles: true, composed: true})
+      new Event('ngl:preview:block:refresh', {bubbles: true, composed: true})
     );
   }
 
