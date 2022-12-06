@@ -25,57 +25,68 @@ export default css`
 
   main {
     position: relative;
-    /* z-index: 1; */
   }
-
-  /* main main {
-    z-index: 3;
-  } */
 
   main.loading {
     opacity: 0.5;
   }
 
-  main ::slotted(.ngl-block):before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-
+  main ::slotted(.ngl-block):before,
   main ::slotted(.ngl-block):after {
     content: '';
-    inset: 0;
     position: absolute;
-    pointer-events: none;
-    z-index: calc(var(--ngl-block-base-z-index, 80000) + 1);
+    inset: 0;
+    z-index: calc(var(--ngl-block-base-z-index, 80000));
+    cursor: pointer;
   }
 
-  main.is_selected ::slotted(.ngl-block):before {
+  main ::slotted(.ngl-block):before {
     pointer-events: none;
-    z-index: 2;
+  }
+
+  main.is_selected ::slotted(.ngl-block):before,
+  main.is_selected ::slotted(.ngl-block):after {
+    pointer-events: none;
   }
 
   main:not(.is_selected).is_hovered ::slotted(.ngl-block):before {
     background-color: var(--ngl-block-background-color-selected);
-    z-index: 80000;
+    z-index: calc(var(--ngl-block-base-z-index, 80000));
+  }
+  
+  main:not(.is_selected):not(.is_child_selected).is_hovered ::slotted(.ngl-block):before {
+    pointer-events: auto;
   }
 
-  main:not(.is_selected).is_parent.is_hovered ::slotted(.ngl-block):before {
-    z-index: 0;
+  main.is_child_selected ::slotted(.ngl-block):after {
+    pointer-events: none;
   }
 
   main.is_selected ::slotted(.ngl-block):after {
-    border: solid var(--ngl-block-outline-width)
-      var(--ngl-block-outline-color-selected);
+    border: solid var(--ngl-block-outline-width) var(--ngl-block-outline-color-selected);
+  }
+  main:not(.is_container).is_selected.is_collection_empty ::slotted(.ngl-block):after {
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 10);
+    pointer-events: auto;
   }
 
   main:not(.is_selected).is_hovered ::slotted(.ngl-block):after {
     border: solid 1px var(--ngl-block-outline-color-hover);
   }
 
+  main:not(.is_selected):not(.is_container_empty):not(.is_child_selected):not(.is_container_selected).is_collection_empty ::slotted(.ngl-block):before {
+    background-image: linear-gradient(135deg, #cfcfcf 2.94%, rgba(151, 71, 255, 0) 2.94%, rgba(151, 71, 255, 0) 50%, #cfcfcf 50%, #cfcfcf 52.94%, rgba(151, 71, 255, 0) 52.94%, rgba(151, 71, 255, 0) 100%);
+    background-size: 24.04px 24.04px;
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 4); 
+  }
+
+  main.is_collection_empty,
+  main.is_collection_empty ::slotted(.ngl-block) {
+    min-height: 100px;
+  }
+
   .edit-menu {
-    z-index: calc(var(--ngl-block-base-z-index) + 2);
+    z-index: 80010;
     display: none;
     visibility: hidden;
     opacity: 0;
@@ -83,7 +94,9 @@ export default css`
     right: 0;
     bottom: 100%;
     gap: 0.25rem;
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 7);
   }
+
   main.is_selected .edit-menu,
   main.is_hovered .edit-menu {
     display: inline-flex;
@@ -125,7 +138,7 @@ export default css`
     display: none;
     visibility: hidden;
     opacity: 0;
-    z-index: calc(var(--ngl-block-base-z-index) + 2);
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 10);
   }
 
   main.is_selected .breadcrumbs {
@@ -142,6 +155,7 @@ export default css`
     border-radius: 0.125rem 0.125rem 0 0;
     text-transform: capitalize;
   }
+
   main button.breadcrumb-btn:not(:last-child):hover {
     --_btn-background-color: var(--ngl-block-button-background-color-hover);
   }
@@ -154,25 +168,42 @@ export default css`
   .breadcrumb-btn > svg {
     position: absolute;
     left: calc(100% - 5px);
-    z-index: calc(var(--ngl-block-base-z-index) + 3);
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 3);
   }
 
   .add-btn {
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translate(-50%, calc(50% - 2px));
+    transform: translate(-50%, 100%);
     padding: 0.125rem 0.5rem 0.125rem 0.25rem;
     display: none;
     opacity: 0;
-    z-index: calc(var(--ngl-block-base-z-index) + 3);
     visibility: hidden;
-    border-radius: 0.125rem;
+    border-radius: 0 0 .125rem .125rem;
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 10);
   }
 
   main.is_selected .add-btn {
     display: inline-flex;
     opacity: 1;
     visibility: visible;
+  }
+
+  .move-btns {
+    display: none;
+  }
+
+  main.is_selected .move-btns {
+    display: flex; 
+    gap: .125rem;
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 11);
+  }
+  
+  .move-btn {
+    padding: .25rem;
   }
 `;
