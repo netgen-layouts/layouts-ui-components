@@ -119,36 +119,59 @@ export default class Block extends LitElement {
 
   async fetch() {
     this.loading = true;
-    const resp = await fetch(window.location.href);
-    this.loading = false;
-    return resp.text();
+    try {
+      const resp = await fetch(window.location.href);
+      return resp.text();
+    } finally {
+      this.loading = false;
+    }
   }
 
   async refresh() {
-    let html = await this.fetch();
+    try {
+      let html = await this.fetch();
 
-    const template = document.createElement('template');
-    template.innerHTML = html;
+      const template = document.createElement('template');
+      template.innerHTML = html;
 
-    const currentBlockHtml = template.content.querySelector(
-      `ngl-block[blockId="${this.blockId}"]`
-    );
-    this.innerHTML = currentBlockHtml.innerHTML;
+      const currentBlockHtml = template.content.querySelector(
+        `ngl-block[blockId="${this.blockId}"]`
+      );
+      this.innerHTML = currentBlockHtml.innerHTML;
 
-    
-    this.setNewAttributes(currentBlockHtml);
-    this.isSelected = true;
 
-    this.dispatchEvent(
-      new Event('ngl:preview:block:refresh', {bubbles: true, composed: true})
-    );
-    this.markPlaceholders();
-    this.setIsContainerSelected(true)
-    this.setIsChildSelected(true)
+      this.setNewAttributes(currentBlockHtml);
+      this.isSelected = true;
 
-    if(this.parentElement) [
-      this.parentElement.setIsEmptyState()
-    ]
+      this.dispatchEvent(
+        new Event('ngl:preview:block:refresh', {bubbles: true, composed: true})
+      );
+      this.markPlaceholders();
+      this.setIsContainerSelected(true)
+      this.setIsChildSelected(true)
+
+      if(this.parentElement) [
+        this.parentElement.setIsEmptyState()
+      ]
+    } catch (e) {
+      const body = `<div class="error_message">
+  <p>An error occurred and we're not sure why.</p>
+  <p>Please, refresh the preview.</p>
+</div>`;
+
+      new this.core.Modal({
+        title:  'Something went wrong!',
+        body: body,
+        apply_text: 'Refresh',
+        cancel_disabled: true,
+        modal_options: {
+          keyboard: false,
+          backdrop: 'static'
+        }
+      }).on('apply', function(){
+        parent.document.querySelector('.preview-iframe-sizer iframe')?.contentWindow.location.reload();
+      }).open();
+    }
   }
 
   setNewAttributes(newElement) {
