@@ -31,8 +31,8 @@ export default css`
     opacity: 0.5;
   }
 
-  main ::slotted(.ngl-block):before,
-  main ::slotted(.ngl-block):after {
+  main ::slotted(.ngl-slotted-block):before,
+  main ::slotted(.ngl-slotted-block):after {
     content: '';
     position: absolute;
     inset: 0;
@@ -40,48 +40,50 @@ export default css`
     cursor: pointer;
   }
 
-  main ::slotted(.ngl-block):before {
+  main ::slotted(.ngl-slotted-block):before {
     pointer-events: none;
   }
 
-  main.is_selected ::slotted(.ngl-block):before,
-  main.is_selected ::slotted(.ngl-block):after {
+  main.is_selected ::slotted(.ngl-slotted-block):before,
+  main.is_selected ::slotted(.ngl-slotted-block):after {
     pointer-events: none;
   }
 
-  main:not(.is_selected).is_hovered ::slotted(.ngl-block):before {
+  main:not(.is_selected).is_hovered ::slotted(.ngl-slotted-block):before {
     background-color: var(--ngl-block-background-color-selected);
     z-index: calc(var(--ngl-block-base-z-index, 80000));
   }
   
-  main:not(.is_selected):not(.is_child_selected).is_hovered ::slotted(.ngl-block):before {
+  main:not(.is_selected):not(.is_child_selected).is_hovered ::slotted(.ngl-slotted-block):before {
     pointer-events: auto;
   }
 
-  main.is_child_selected ::slotted(.ngl-block):after {
+  main.is_child_selected ::slotted(.ngl-slotted-block):after {
     pointer-events: none;
   }
 
-  main.is_selected ::slotted(.ngl-block):after {
+  main.is_selected ::slotted(.ngl-slotted-block):after {
     border: solid var(--ngl-block-outline-width) var(--ngl-block-outline-color-selected);
   }
-  main:not(.is_container).is_selected.is_collection_empty ::slotted(.ngl-block):after {
+  main:not(.is_container).is_selected.is_empty ::slotted(.ngl-slotted-block):after {
     z-index: calc(var(--ngl-block-base-z-index, 80000) + 10);
     pointer-events: auto;
   }
 
-  main:not(.is_selected).is_hovered ::slotted(.ngl-block):after {
+  main:not(.is_selected).is_hovered ::slotted(.ngl-slotted-block):after {
     border: solid 1px var(--ngl-block-outline-color-hover);
   }
 
-  main:not(.is_selected):not(.is_container_empty):not(.is_child_selected):not(.is_container_selected).is_collection_empty ::slotted(.ngl-block):before {
+  main:not(.is_selected):not(.is_container_empty):not(.is_child_selected):not(.is_container_selected).is_empty ::slotted(.ngl-slotted-block):before {
     background-image: linear-gradient(135deg, #cfcfcf 2.94%, rgba(151, 71, 255, 0) 2.94%, rgba(151, 71, 255, 0) 50%, #cfcfcf 50%, #cfcfcf 52.94%, rgba(151, 71, 255, 0) 52.94%, rgba(151, 71, 255, 0) 100%);
     background-size: 24.04px 24.04px;
     z-index: calc(var(--ngl-block-base-z-index, 80000) + 4); 
   }
 
-  main.is_collection_empty,
-  main.is_collection_empty ::slotted(.ngl-block) {
+  main.is_empty,
+  main.is_empty ::slotted(.ngl-slotted-block),
+  main.is_full_view_block,
+  main.is_full_view_block ::slotted(.ngl-slotted-block) {
     min-height: 100px;
   }
 

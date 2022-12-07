@@ -206,7 +206,7 @@ export default class BlockPicker extends LitElement {
     };
 
     return html`
-      <main class=${classMap(classes)} @click=${() => this.isActive = false}>
+      <main class=${classMap(classes)} @click=${this.handleClose}>
         ${this.renderBlockGroups()}
         <slot></slot>
       </main>

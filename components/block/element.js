@@ -14,10 +14,11 @@ export default class Block extends LitElement {
     isSelected: {type: Boolean},
     isHovered: {type: Boolean, state: true},
     isContainer: {type: Boolean, state: true},
-    isCollectionEmpty: {type: Boolean},
+    isEmpty: {type: Boolean},
     isContainerEmpty: {type: Boolean, default: false},
     isContainerSelected: {type: Boolean, default: false},
     isChildSelected: {type: Boolean, default: false},
+    isFullViewBlock: {type: Boolean, default: false},
   };
 
   constructor() {
@@ -34,6 +35,7 @@ export default class Block extends LitElement {
     super.connectedCallback();
      
     this.isContainer = this.model.attributes.is_container;
+    this.isFullViewBlock = this.model.attributes.definition_identifier === 'full_view'
     this.model.on('change', this.refresh.bind(this));
     this.model.on('sidebar:destroyed', () => {
       this.isSelected = false;
@@ -41,6 +43,21 @@ export default class Block extends LitElement {
       this.setIsContainerSelected(false)
       this.setIsChildSelected(false)
     });
+
+    const bc = new BroadcastChannel('publish_content');
+    bc.onmessage = (event) => {
+      this.handleMessageRecieved(event.data)
+    };
+  }
+
+  handleMessageRecieved(data) {
+    const { contentId, blockId, locale } = data;
+
+    if(blockId !== this.blockId) return;
+
+    console.debug(data)
+    this.refresh();
+    this.model.trigger('edit');
   }
 
 
@@ -81,7 +98,7 @@ export default class Block extends LitElement {
   }
 
   get isInLinkedZone() {
-    return this.model.zone().is_linked();
+    return this.model.zone()?.is_linked();
   }
 
   get slot() {
@@ -93,11 +110,11 @@ export default class Block extends LitElement {
   }
 
   get placeholders() {
-    return this.slottedChildren[0].querySelectorAll('ngl-placeholder')
+    return this.slottedChildren[0]?.querySelectorAll('ngl-placeholder')
   }
 
   get childBlocks() {
-    return this.slottedChildren[0].querySelectorAll('ngl-block')
+    return this.slottedChildren[0]?.querySelectorAll('ngl-block')
   }
   // GETTERS - end
 
@@ -133,15 +150,18 @@ export default class Block extends LitElement {
     if(!this.isContainer) return;
 
     const areAllPlaceholdersEmpty = [...this.placeholders].every(el => el.isEmpty)
-    const areAllChildBlocksEmpty = [...this.childBlocks].every(el => el.isCollectionEmpty)
+    const areAllChildBlocksEmpty = [...this.childBlocks].every(el => el.isEmpty)
 
-    this.isCollectionEmpty = areAllPlaceholdersEmpty || areAllChildBlocksEmpty;
-    
+    this.isEmpty = areAllPlaceholdersEmpty || areAllChildBlocksEmpty;
+    this.isChildSelected = [...this.childBlocks].some(el => el.isSelected)
+
     this.setChildBlocksIsEmptyState();
+
+    if(this.isSelected) this.markPlaceholders()
   }
 
   setChildBlocksIsEmptyState() {
-    if(!this.isCollectionEmpty) return;
+    if(!this.isEmpty) return;
 
     [...this.placeholders, ...this.childBlocks].map(el => el.isContainerEmpty = true)
   }
@@ -408,7 +428,8 @@ export default class Block extends LitElement {
       is_selected: this.isSelected,
       is_hovered: this.isHovered,
       is_container: this.isContainer,
-      is_collection_empty: this.isCollectionEmpty,
+      is_empty: this.isEmpty,
+      is_full_view_block: this.isFullViewBlock,
       is_container_empty: this.isContainerEmpty,
       is_container_selected: this.isContainerSelected,
       is_child_selected: this.isChildSelected,
