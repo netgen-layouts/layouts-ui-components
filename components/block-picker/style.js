@@ -4,7 +4,7 @@ export default css`
     :host,
     :after,
     :before {
-        --ngl-block-picker-width: 26.625rem;
+        --ngl-block-picker-width: 22.625rem;
         --ngl-block-picker-gutter: 0.9375rem;
         --ngl-block-picker-background-color: #383838;
         --ngl-block-picker-border-color: #4f4f4f;
@@ -92,8 +92,8 @@ export default css`
         border: 0;
         border-bottom: 1px solid var(--ngl-block-picker-background-color);
         border-right: 1px solid var(--ngl-block-picker-background-color);
-        width: calc( ( var(--ngl-block-picker-width) - 2 * var(--ngl-block-picker-gutter) - 44px )/ 4);
-        background-color: var(--ngl-block-picker-block-background-color);
+        width: calc( ( var(--ngl-block-picker-width) - 2 * var(--ngl-block-picker-gutter) - 30px)/ 4);
+        background: #4a4a4a;
         border: 1px solid var(--ngl-block-picker-background-color);
         aspect-ratio: 1/1;
         color: var(--ngl-block-picker-text-color);
@@ -103,16 +103,20 @@ export default css`
         cursor: pointer;
         display: flex;
         flex-direction: column;
+        font-size: .625rem;
+        line-height: 1.2;
+        align-itmes: center;
+        justify-content: center;
     }
 
     .add-block-btn:hover {
-        background: hsl(0, 0, 36);
+        background: #5c5c5c;
         color: #fff;
     }
 
     .add-block-btn .icon {
         font-size: 2em;
-        height: 1.5em;
+        height: 2.5rem;
         line-height: 1.25;
         margin-bottom: .125em;
         padding: .125em;
@@ -121,10 +125,14 @@ export default css`
         justify-content: center;
     }
 
-    .add-block-btn .icon img {
+    .add-block-btn .icon {
         max-width: 100%;
         max-height: 100%;
         display: block;
+    }
+
+    .add-block-btn:hover .icon {
+        filter: brightness(0) saturate(100%) invert(99%) sepia(97%) saturate(0%) hue-rotate(74deg) brightness(104%) contrast(100%);
     }
 
     .add-block-btn:nth-child(4n) {
