@@ -49,6 +49,7 @@ export default class BlockPicker extends LitElement {
 
   handleClose() {
     this.isActive = false
+    this.placeholderIdentifier = false
     this.iframe.contentDocument.querySelector('body').style.overflowY = 'auto';
   }
 
@@ -79,12 +80,16 @@ export default class BlockPicker extends LitElement {
   }
 
   renderBlockGroup(group) {
+    const blockTypes = group._block_types.filter(blockType => this.placeholderIdentifier || this.block.attributes.parent_placeholder ? !blockType.attributes.is_container : true)
+    
+    if(blockTypes.length <= 0 ) return;
+
     return html`
         <div class="header">
             <h2>${group.attributes.name}</h2>
         </div>
         <div class="block-items">
-            ${group._block_types.map((blockType, index) => this.renderBlockType(blockType, index))}
+            ${blockTypes.map((blockType, index) => this.renderBlockType(blockType, index))}
         </div>
     `
   }
