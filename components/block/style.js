@@ -99,8 +99,7 @@ export default css`
     z-index: calc(var(--ngl-block-base-z-index, 80000) + 7);
   }
 
-  main.is_selected .edit-menu,
-  main.is_hovered .edit-menu {
+  main.is_selected .edit-menu {
     display: inline-flex;
     opacity: 1;
     visibility: visible;
@@ -171,6 +170,8 @@ export default css`
     position: absolute;
     left: calc(100% - 5px);
     z-index: calc(var(--ngl-block-base-z-index, 80000) + 3);
+    height: 21px;
+    width: 18px;
   }
 
   .add-btn {

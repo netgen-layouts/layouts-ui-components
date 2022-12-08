@@ -55,7 +55,6 @@ export default class Block extends LitElement {
 
     if(blockId !== this.blockId) return;
 
-    console.debug(data)
     this.refresh();
     this.model.trigger('edit');
   }
@@ -92,9 +91,9 @@ export default class Block extends LitElement {
   }
 
   get parentName() {
-    if (!this.parent) return;
+    if (!this.parentElement) return;
 
-    return this.parent.getAttribute('viewTypeName')
+    return this.parentElement.getAttribute('viewTypeName')
   }
 
   get isInLinkedZone() {
@@ -135,7 +134,8 @@ export default class Block extends LitElement {
       `ngl-block[blockId="${this.blockId}"]`
     );
 
-    this.innerHTML = currentBlockHtml.innerHTML;
+    this.replaceWith(currentBlockHtml);
+    currentBlockHtml.isSelected = true;
 
     this.dispatchEvent(
       new Event('ngl:preview:block:refresh', {bubbles: true, composed: true})
@@ -192,12 +192,14 @@ export default class Block extends LitElement {
   select() {
     if (this.isInLinkedZone) return;
 
+    console.debug(this.model)
+
     this.model.trigger('edit');
     this.isSelected = true;
   }
 
   parentSelect() {
-    this.parent.select();
+    this.parentElement.select();
   }
 
   setIsChildSelected(selected) {
@@ -262,7 +264,7 @@ export default class Block extends LitElement {
     blockIds.splice(fromIndex, 1)
     blockIds.splice(toIndex, 0, this.blockId)
     
-    if(this.parent) {
+    if(this.parentElement) {
       this.model.set({
         parent_position: this.model.attributes.parent_position + directionNumber,
         zone_identifier: this.model.attributes.zone_identifier,
@@ -395,7 +397,7 @@ export default class Block extends LitElement {
 
     return html`
       <div class="breadcrumbs">
-        ${this.parent
+        ${this.parentElement
           ? this.renderInnerBlokcBreadcrumbs()
           : this.renderOuterBlokcBreadcrumbs()}
       </div>
