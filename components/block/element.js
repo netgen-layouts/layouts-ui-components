@@ -143,6 +143,10 @@ export default class Block extends LitElement {
     this.markPlaceholders();
     this.setIsContainerSelected(true)
     this.setIsChildSelected(true)
+
+    if(this.parentElement) [
+      this.parentElement.setIsEmptyState()
+    ]
   }
 
 
@@ -199,7 +203,7 @@ export default class Block extends LitElement {
   }
 
   parentSelect() {
-    this.parentElement.select();
+    this.parentElement.toggleSelect();
   }
 
   setIsChildSelected(selected) {
@@ -435,6 +439,7 @@ export default class Block extends LitElement {
       is_container_empty: this.isContainerEmpty,
       is_container_selected: this.isContainerSelected,
       is_child_selected: this.isChildSelected,
+      is_child_block: this.parentElement,
     };
 
     return html`

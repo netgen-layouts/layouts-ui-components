@@ -40,6 +40,10 @@ export default css`
     cursor: pointer;
   }
 
+  main.is_child_block ::slotted(.ngl-slotted-block):after {
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 5);
+  }
+
   main ::slotted(.ngl-slotted-block):before {
     pointer-events: none;
   }
@@ -53,6 +57,7 @@ export default css`
     background-color: var(--ngl-block-background-color-selected);
     z-index: calc(var(--ngl-block-base-z-index, 80000));
   }
+  
   
   main:not(.is_selected):not(.is_child_selected).is_hovered ::slotted(.ngl-slotted-block):before {
     pointer-events: auto;

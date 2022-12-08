@@ -33,7 +33,7 @@ export default css`
         width: var(--ngl-block-picker-width);
         background: var(--ngl-block-picker-background-color);
         color: var(--ngl-block-picker-text-color);
-        overflow-y: hidden;
+        overflow-y: scroll;
         transform: translate(-50%, -200vh);
     }
 
@@ -44,8 +44,6 @@ export default css`
 
     .panel-content {
         padding: var(--ngl-block-picker-gutter);
-        max-height: 90vh;
-        overflow-y: scroll;
     }
 
     .close-panel {
@@ -58,10 +56,13 @@ export default css`
         text-align: right;
         color: var(--ngl-block-picker-text-color);
         z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .close-panel i {
-        font-size: 1.125rem;
+    .close-panel svg {
+        fill: var(--ngl-block-picker-text-color)
     }
 
     .close-panel:hover {
@@ -100,6 +101,8 @@ export default css`
         padding: 0.25em 0.25em 0.625em;
         transition: background .15s ease, color .15s ease;
         cursor: pointer;
+        display: flex;
+        flex-direction: column;
     }
 
     .add-block-btn:hover {

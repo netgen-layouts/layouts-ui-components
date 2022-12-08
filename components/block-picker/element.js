@@ -1,5 +1,6 @@
 import {LitElement, html} from 'lit';
 import {classMap} from 'lit/directives/class-map.js';
+import { CloseIcon } from '../icons.js';
 import style from './style.js';
 
 export default class BlockPicker extends LitElement {
@@ -59,7 +60,7 @@ export default class BlockPicker extends LitElement {
   renderCloseBtn() {
     return html`
       <a class="close-panel" @click=${this.handleClose}>
-        <i class="material-icons">close</i>
+        ${CloseIcon()}
       </a>
     `
   }
@@ -89,9 +90,11 @@ export default class BlockPicker extends LitElement {
   }
 
   renderBlockType(blockType, index) {
+    const icon = blockType.attributes.icon ? html`<img class="icon" src="${blockType.attributes.icon}" />` : html`<span class="icon font-icon"></span>`
+
     return html`
       <div class="add-block-btn icn-${blockType.id}" @click="${() => this.handleCreateBlockFromType(blockType)}">  
-          <span class="icon ${blockType.attributes.icon ?? 'font-icon' }"></span>
+          ${icon}
           <span class="title">${blockType.attributes.name}</span>
       </div>
     `
