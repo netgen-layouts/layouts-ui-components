@@ -154,6 +154,8 @@ export default class Block extends LitElement {
         this.parentElement.setIsEmptyState()
       ]
     } catch (e) {
+      console.error(e);
+
       const body = `<div class="error_message">
   <p>An error occurred and we're not sure why.</p>
   <p>Please, refresh the preview.</p>
