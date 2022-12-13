@@ -155,25 +155,28 @@ export default class Block extends LitElement {
       ]
     } catch (e) {
       console.error(e);
+      this.showErrorModal();
+    }
+  }
 
-      const body = `<div class="error_message">
+  showErrorModal() {
+    const body = `<div class="error_message">
   <p>An error occurred and we're not sure why.</p>
   <p>Please, refresh the preview.</p>
 </div>`;
 
-      new this.core.Modal({
-        title:  'Something went wrong!',
-        body: body,
-        apply_text: 'Refresh',
-        cancel_disabled: true,
-        modal_options: {
-          keyboard: false,
-          backdrop: 'static'
-        }
-      }).on('apply', function(){
-        parent.document.querySelector('.preview-iframe-sizer iframe')?.contentWindow.location.reload();
-      }).open();
-    }
+    new this.core.Modal({
+      title:  'Something went wrong!',
+      body: body,
+      apply_text: 'Refresh',
+      cancel_disabled: true,
+      modal_options: {
+        keyboard: false,
+        backdrop: 'static'
+      }
+    }).on('apply', function(){
+      parent.document.querySelector('.preview-iframe-sizer iframe')?.contentWindow.location.reload();
+    }).open();
   }
 
   setNewAttributes(newElement) {
