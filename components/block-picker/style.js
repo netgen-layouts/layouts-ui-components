@@ -37,6 +37,14 @@ export default css`
         transform: translate(-50%, -200vh);
     }
 
+    .panel::-webkit-scrollbar {
+        width: .3125rem;
+    }
+
+    .panel::-webkit-scrollbar-thumb {
+        background: #999;
+    }
+      
     main.is_active .panel {
         transform: translate(-50%, -50%);
         transition: transform 350ms 150ms ease;
@@ -92,7 +100,7 @@ export default css`
         border: 0;
         border-bottom: 1px solid var(--ngl-block-picker-background-color);
         border-right: 1px solid var(--ngl-block-picker-background-color);
-        width: calc( ( var(--ngl-block-picker-width) - 2 * var(--ngl-block-picker-gutter) - 30px)/ 4);
+        width: calc( ( var(--ngl-block-picker-width) - 2 * var(--ngl-block-picker-gutter) - 2rem)/ 4);
         background: #4a4a4a;
         border: 1px solid var(--ngl-block-picker-background-color);
         aspect-ratio: 1/1;
