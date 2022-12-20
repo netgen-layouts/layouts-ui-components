@@ -216,7 +216,7 @@ export default class Block extends LitElement {
   }
   
   setIsContainerSelected(selected) {
-    if(!this.isContainer) return;
+    if(!this.isContainer || !this.childBlocks) return;
     
     this.childBlocks.forEach(el => el.isContainerSelected = selected)
   }
@@ -243,6 +243,8 @@ export default class Block extends LitElement {
   }
   
   toggleMarkPlaceholders(mark) {
+    if(!this.placeholders) return;
+    
     this.placeholders.forEach(el => el.isMarked = mark)
   }
 
