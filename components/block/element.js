@@ -160,10 +160,12 @@ export default class Block extends LitElement {
   }
 
   showErrorModal() {
-    const body = `<div class="error_message">
-  <p>An error occurred and we're not sure why.</p>
-  <p>Please, refresh the preview.</p>
-</div>`;
+    const body = `
+      <div class="error_message">
+        <p>An error occurred and we're not sure why.</p>
+        <p>Please, refresh the preview.</p>
+      </div>
+    `;
 
     new this.core.Modal({
       title:  'Something went wrong!',
