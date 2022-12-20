@@ -397,24 +397,24 @@ export default class Block extends LitElement {
     return html`
       <div class="breadcrumbs">
         ${this.parentElement
-          ? this.renderInnerBlokcBreadcrumbs()
-          : this.renderOuterBlokcBreadcrumbs()}
+          ? this.renderInnerBlockBreadcrumbs()
+          : this.renderOuterBlockBreadcrumbs()}
       </div>
     `;
   }
 
-  renderInnerBlokcBreadcrumbs() {
+  renderInnerBlockBreadcrumbs() {
     return html`
         <button class="breadcrumb-btn" @click=${this.parentSelect}>
           <span>${this.parentName}</span>
           ${BreadcrumbArrowIcon()}
         </button>
-        ${this.renderOuterBlokcBreadcrumbs()}
+        ${this.renderOuterBlockBreadcrumbs()}
       </div>
     `;
   }
 
-  renderOuterBlokcBreadcrumbs() {
+  renderOuterBlockBreadcrumbs() {
     return html`
       <button class="breadcrumb-btn" @click=${this.select}>
         <span>${this.viewTypeName}</span>

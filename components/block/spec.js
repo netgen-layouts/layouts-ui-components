@@ -110,7 +110,9 @@ describe('ngl-block', () => {
   it('should render block with parent', async () => {
     stubLayoutEnv({
       block: {
-        parent_block_id: 1,
+        attributes: {
+          parent_block_id: 1,
+        }
       },
       zone: {
         is_linked() {
