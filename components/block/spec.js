@@ -110,9 +110,7 @@ describe('ngl-block', () => {
   it('should render block with parent', async () => {
     stubLayoutEnv({
       block: {
-        attributes: {
-          parent_block_id: 1,
-        }
+        parent_block_id: 1,
       },
       zone: {
         is_linked() {
@@ -132,9 +130,6 @@ describe('ngl-block', () => {
       `
         <main>
           <div class="breadcrumbs">
-            <button class="breadcrumb-btn">
-              <span></span>
-            </button>
             <button class="breadcrumb-btn">
               <span></span>
             </button>
