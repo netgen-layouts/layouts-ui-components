@@ -57,19 +57,23 @@ describe('ngl-block', () => {
       element,
       `
         <main>
-          <div class="edit-menu">
-            <button>
-              <span>Select</span>
-            </button>
-            <button class="refresh-btn">
-            </button>
-          </div>
           <div class="breadcrumbs">
             <button class="breadcrumb-btn">
               <span></span>
             </button>
           </div>
+          <div class="edit-menu">
+            <button class="refresh-btn">
+            </button>
+          </div>
           <slot></slot>
+          <button class="add-btn">
+            <svg width="25" height="22" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6.5" y="11" width="12" height="2" fill="#E0C8FF"></rect>
+              <rect x="11.5" y="18" width="12" height="2" transform="rotate(-90 11.5 18)" fill="#E0C8FF"></rect>
+            </svg>
+            <span>Add</span>
+          </button>
         </main>
       `
     );
@@ -97,9 +101,6 @@ describe('ngl-block', () => {
       element,
       `
         <main>
-          <div class="edit-menu">
-            <button class="refresh-btn"></button>
-          </div>
           <slot></slot>
         </main>
       `
@@ -128,13 +129,6 @@ describe('ngl-block', () => {
       element,
       `
         <main>
-          <div class="edit-menu">
-            <button>
-              <span>Select</span>
-            </button>
-            <button class="refresh-btn">
-            </button>
-          </div>
           <div class="breadcrumbs">
             <button class="breadcrumb-btn">
               <span></span>
@@ -143,7 +137,18 @@ describe('ngl-block', () => {
               <span></span>
             </button>
           </div>
+          <div class="edit-menu">
+            <button class="refresh-btn">
+            </button>
+          </div>
           <slot></slot>
+          <button class="add-btn">
+            <svg width="25" height="22" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6.5" y="11" width="12" height="2" fill="#E0C8FF"></rect>
+              <rect x="11.5" y="18" width="12" height="2" transform="rotate(-90 11.5 18)" fill="#E0C8FF"></rect>
+            </svg>
+            <span>Add</span>
+          </button>
         </main>
       `
     );

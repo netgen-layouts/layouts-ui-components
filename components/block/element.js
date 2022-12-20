@@ -375,17 +375,12 @@ export default class Block extends LitElement {
   }
 
   renderMenu() {
-    if (this.isInLinkedZone) return this.renderLinkedBlockMenu();
+    if (this.isInLinkedZone) return;
 
-    return this.renderOuterBlockMenu();
-  }
-
-  renderLinkedBlockMenu() {
     return html`
-      <button class="refresh-btn" @click=${this.refresh}>
-        ${RefreshIcon()}
-      </button>
-    `;
+      <div class="edit-menu">
+        ${this.renderOuterBlockMenu()}
+      </div>`
   }
 
   renderOuterBlockMenu() {
@@ -449,7 +444,7 @@ export default class Block extends LitElement {
         @mouseout=${this.handleMouseout}
       >
         ${this.renderBreadcrumbs()}
-        <div class="edit-menu">${this.renderMenu()}</div>
+        ${this.renderMenu()}
         <slot @click=${this.selectOnBlockClick} @slotchange=${this.setIsEmptyState}></slot>
         ${this.renderAddButton()}
       </main>
