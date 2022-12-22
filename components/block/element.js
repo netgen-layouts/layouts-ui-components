@@ -55,7 +55,6 @@ export default class Block extends LitElement {
 
     if(blockId !== this.blockId) return;
 
-    this.refresh();
     this.model.trigger('edit');
   }
 
@@ -130,12 +129,15 @@ export default class Block extends LitElement {
 
     const template = document.createElement('template');
     template.innerHTML = html;
+
     const currentBlockHtml = template.content.querySelector(
       `ngl-block[blockId="${this.blockId}"]`
     );
+    this.innerHTML = currentBlockHtml.innerHTML;
 
-    this.replaceWith(currentBlockHtml);
-    currentBlockHtml.isSelected = true;
+    
+    this.setNewAttributes(currentBlockHtml);
+    this.isSelected = true;
 
     this.dispatchEvent(
       new Event('ngl:preview:block:refresh', {bubbles: true, composed: true})
@@ -149,6 +151,21 @@ export default class Block extends LitElement {
     ]
   }
 
+  setNewAttributes(newElement) {
+    const oldAttributess = this.getAttributesObject(this);
+    const newAttributess = this.getAttributesObject(newElement);
+
+    Object.entries(oldAttributess).map(attribute => !newAttributess[attribute[0]] && this.removeAttribute(attribute[0]))
+    Object.entries(newAttributess).map(attribute => this[attribute[1]] = attribute[1])
+  }
+
+  getAttributesObject(el) {
+    const attrs = el.getAttributeNames().reduce((acc, name) => {
+      return {...acc, [name]: el.getAttribute(name)};
+    }, {});
+
+    return attrs
+  }
 
   setIsEmptyState() {
     if(!this.isContainer) return;

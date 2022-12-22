@@ -120,19 +120,23 @@ describe('ngl-block', () => {
     });
 
     const element = await fixture(
-      html`<ngl-block
-        blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"
-      ></ngl-block>`
+      html`
+        <ngl-block blockId="1">
+          <ngl-block blockId="dfc6a013-75ee-4076-b228-050e28c0b0c0"></ngl-block>
+        </ngl-block>`
     );
 
     assert.shadowDom.equal(
-      element,
+      element.querySelector('ngl-block'),
       `
-        <main>
+        <main class="is_child_block">
           <div class="breadcrumbs">
             <button class="breadcrumb-btn">
               <span></span>
             </button>
+            <button class="breadcrumb-btn">
+            <span></span>
+          </button>
           </div>
           <div class="edit-menu">
             <button class="refresh-btn">
