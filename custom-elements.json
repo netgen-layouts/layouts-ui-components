@@ -1,0 +1,835 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "components.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Block",
+          "declaration": {
+            "name": "default",
+            "module": "./components/block/element.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Placeholder",
+          "declaration": {
+            "name": "default",
+            "module": "./components/placeholder/element.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BlockPicker",
+          "declaration": {
+            "name": "default",
+            "module": "./components/block-picker/element.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/dist.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ot",
+          "members": [
+            {
+              "kind": "field",
+              "name": "layout"
+            },
+            {
+              "kind": "field",
+              "name": "core"
+            },
+            {
+              "kind": "field",
+              "name": "model"
+            },
+            {
+              "kind": "field",
+              "name": "parent"
+            },
+            {
+              "kind": "field",
+              "name": "isInLinkedZone"
+            },
+            {
+              "kind": "method",
+              "name": "deselectIcon"
+            },
+            {
+              "kind": "method",
+              "name": "refreshIcon"
+            },
+            {
+              "kind": "method",
+              "name": "renderMenu"
+            },
+            {
+              "kind": "method",
+              "name": "renderLinkedBlockMenu"
+            },
+            {
+              "kind": "method",
+              "name": "renderOuterBlockMenu"
+            },
+            {
+              "kind": "method",
+              "name": "renderBreadcrumbs"
+            },
+            {
+              "kind": "method",
+              "name": "renderInnerBlokcBreadcrumbs"
+            },
+            {
+              "kind": "method",
+              "name": "renderOuterBlokcBreadcrumbs"
+            },
+            {
+              "kind": "method",
+              "name": "breadcrumbArrowIcon"
+            },
+            {
+              "kind": "method",
+              "name": "renderAddButton"
+            },
+            {
+              "kind": "method",
+              "name": "toggleSelect"
+            },
+            {
+              "kind": "method",
+              "name": "select"
+            },
+            {
+              "kind": "method",
+              "name": "parentSelect"
+            },
+            {
+              "kind": "method",
+              "name": "getClosestBlockId",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "selectOnBlockClick",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseover",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseout",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "fetch"
+            },
+            {
+              "kind": "method",
+              "name": "refresh"
+            },
+            {
+              "kind": "method",
+              "name": "parentRefresh"
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!1",
+              "privacy": "public",
+              "attribute": "loading"
+            },
+            {
+              "kind": "field",
+              "name": "blockId",
+              "privacy": "public",
+              "attribute": "blockId"
+            },
+            {
+              "kind": "field",
+              "name": "templateName",
+              "privacy": "public",
+              "attribute": "templateName"
+            },
+            {
+              "kind": "field",
+              "name": "isSelected",
+              "privacy": "public",
+              "attribute": "isSelected"
+            },
+            {
+              "kind": "field",
+              "name": "isHovered",
+              "privacy": "public",
+              "attribute": "isHovered"
+            },
+            {
+              "kind": "field",
+              "name": "isParent",
+              "privacy": "public",
+              "attribute": "isParent"
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderOptions",
+              "type": {
+                "text": "object"
+              },
+              "default": "{host:this}",
+              "inheritedFrom": {
+                "name": "Y",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Do",
+              "default": "void 0",
+              "inheritedFrom": {
+                "name": "Y",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addInitializer",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createProperty",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "t"
+                },
+                {
+                  "name": "e",
+                  "default": "v"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getPropertyDescriptor",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "t"
+                },
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "i"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getPropertyOptions",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "finalize",
+              "static": true,
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "finalizeStyles",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_$Ep",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "t"
+                },
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "u",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "addController",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "removeController",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_$Eg",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "enableUpdating",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_$EO",
+              "parameters": [
+                {
+                  "name": "t"
+                },
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "i",
+                  "default": "v"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_$AK",
+              "parameters": [
+                {
+                  "name": "t"
+                },
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_$Ej",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "scheduleUpdate",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_$AE",
+              "parameters": [
+                {
+                  "name": "t"
+                }
+              ],
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_$Ek",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "updateComplete",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getUpdateComplete",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$Ei",
+              "default": "new Map",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "isUpdatePending",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!1",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasUpdated",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "!1",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_$El",
+              "type": {
+                "text": "null"
+              },
+              "default": "null",
+              "inheritedFrom": {
+                "name": "b",
+                "module": "dist/dist.js"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "ngl:refresh",
+              "type": {
+                "text": "Event"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "loading",
+              "fieldName": "loading"
+            },
+            {
+              "name": "blockId",
+              "fieldName": "blockId"
+            },
+            {
+              "name": "templateName",
+              "fieldName": "templateName"
+            },
+            {
+              "name": "isSelected",
+              "fieldName": "isSelected"
+            },
+            {
+              "name": "isHovered",
+              "fieldName": "isHovered"
+            },
+            {
+              "name": "isParent",
+              "fieldName": "isParent"
+            }
+          ],
+          "superclass": {
+            "name": "Y",
+            "module": "dist/dist.js"
+          },
+          "tagName": "ngl-block",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "ngl-block",
+          "declaration": {
+            "name": "ot",
+            "module": "dist/dist.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "components/block/element.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Block",
+          "members": [
+            {
+              "kind": "field",
+              "name": "layout"
+            },
+            {
+              "kind": "field",
+              "name": "core"
+            },
+            {
+              "kind": "field",
+              "name": "model"
+            },
+            {
+              "kind": "field",
+              "name": "parent"
+            },
+            {
+              "kind": "field",
+              "name": "isInLinkedZone"
+            },
+            {
+              "kind": "method",
+              "name": "deselectIcon"
+            },
+            {
+              "kind": "method",
+              "name": "refreshIcon"
+            },
+            {
+              "kind": "method",
+              "name": "renderMenu"
+            },
+            {
+              "kind": "method",
+              "name": "renderLinkedBlockMenu"
+            },
+            {
+              "kind": "method",
+              "name": "renderOuterBlockMenu"
+            },
+            {
+              "kind": "method",
+              "name": "renderBreadcrumbs"
+            },
+            {
+              "kind": "method",
+              "name": "renderInnerBlokcBreadcrumbs"
+            },
+            {
+              "kind": "method",
+              "name": "renderOuterBlokcBreadcrumbs"
+            },
+            {
+              "kind": "method",
+              "name": "breadcrumbArrowIcon"
+            },
+            {
+              "kind": "method",
+              "name": "renderAddButton"
+            },
+            {
+              "kind": "method",
+              "name": "toggleSelect"
+            },
+            {
+              "kind": "method",
+              "name": "select"
+            },
+            {
+              "kind": "method",
+              "name": "parentSelect"
+            },
+            {
+              "kind": "method",
+              "name": "getClosestBlockId",
+              "parameters": [
+                {
+                  "name": "el"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "selectOnBlockClick",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseover",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseout",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "fetch"
+            },
+            {
+              "kind": "method",
+              "name": "refresh"
+            },
+            {
+              "kind": "method",
+              "name": "parentRefresh"
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "privacy": "public",
+              "attribute": "loading"
+            },
+            {
+              "kind": "field",
+              "name": "blockId",
+              "privacy": "public",
+              "attribute": "blockId"
+            },
+            {
+              "kind": "field",
+              "name": "templateName",
+              "privacy": "public",
+              "attribute": "templateName"
+            },
+            {
+              "kind": "field",
+              "name": "isSelected",
+              "privacy": "public",
+              "attribute": "isSelected"
+            },
+            {
+              "kind": "field",
+              "name": "isHovered",
+              "privacy": "public",
+              "attribute": "isHovered"
+            },
+            {
+              "kind": "field",
+              "name": "isParent",
+              "privacy": "public",
+              "attribute": "isParent"
+            }
+          ],
+          "events": [
+            {
+              "name": "ngl:refresh",
+              "type": {
+                "text": "Event"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "loading",
+              "fieldName": "loading"
+            },
+            {
+              "name": "blockId",
+              "fieldName": "blockId"
+            },
+            {
+              "name": "templateName",
+              "fieldName": "templateName"
+            },
+            {
+              "name": "isSelected",
+              "fieldName": "isSelected"
+            },
+            {
+              "name": "isHovered",
+              "fieldName": "isHovered"
+            },
+            {
+              "name": "isParent",
+              "fieldName": "isParent"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ngl-block",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Block",
+            "module": "components/block/element.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "ngl-block",
+          "declaration": {
+            "name": "Block",
+            "module": "components/block/element.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "components/block/spec.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "components/block/style.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "module": "components/block/style.js"
+          }
+        }
+      ]
+    }
+  ]
+}

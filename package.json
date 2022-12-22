@@ -74,5 +74,6 @@
     "test:prod": "MODE=prod wtr",
     "test:prod:watch": "MODE=prod wtr --watch",
     "checksize": "rollup -c ; cat components.bundled.js | gzip -9 | wc -c ; rm components.bundled.js"
-  }
+  },
+  "customElements": "custom-elements.json"
 }
