@@ -367,7 +367,10 @@ export default class Block extends LitElement {
         blockElement.isSelected = true;
         this.model.trigger('edit');
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err);
+        this.showErrorModal();
+      })
       .finally(() => {
         this.isLoading = false
         this.placeholderIdentifier = ""
