@@ -57,8 +57,8 @@ export default css`
     background-color: var(--ngl-block-background-color-selected);
     z-index: calc(var(--ngl-block-base-z-index, 80000));
   }
-  
-  
+
+
   main:not(.is_selected):not(.is_child_selected).is_hovered ::slotted(.ngl-slotted-block):before {
     pointer-events: auto;
   }
@@ -82,7 +82,7 @@ export default css`
   main:not(.is_selected):not(.is_container_empty):not(.is_child_selected):not(.is_container_selected).is_empty ::slotted(.ngl-slotted-block):before {
     background-image: linear-gradient(135deg, #cfcfcf 2.94%, rgba(151, 71, 255, 0) 2.94%, rgba(151, 71, 255, 0) 50%, #cfcfcf 50%, #cfcfcf 52.94%, rgba(151, 71, 255, 0) 52.94%, rgba(151, 71, 255, 0) 100%);
     background-size: 24.04px 24.04px;
-    z-index: calc(var(--ngl-block-base-z-index, 80000) + 4); 
+    z-index: calc(var(--ngl-block-base-z-index, 80000) + 4);
   }
 
   main.is_empty,
@@ -203,14 +203,14 @@ export default css`
   }
 
   main.is_selected .move-btns {
-    display: flex; 
+    display: flex;
     gap: .125rem;
     position: absolute;
     top: .5rem;
     right: .5rem;
     z-index: calc(var(--ngl-block-base-z-index, 80000) + 11);
   }
-  
+
   .move-btn {
     padding: .25rem;
   }

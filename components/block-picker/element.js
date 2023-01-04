@@ -21,11 +21,11 @@ export default class BlockPicker extends LitElement {
     super.connectedCallback();
   }
 
-  
+
   get core() {
     return window.parent.Core;
   }
-    
+
   get layout() {
     return this.core.g.layout;
   }
@@ -67,7 +67,7 @@ export default class BlockPicker extends LitElement {
   }
 
   renderBlockGroups() {
-    if(!this.isActive) return; 
+    if(!this.isActive) return;
 
     return html`
       <div class="panel">
@@ -81,7 +81,7 @@ export default class BlockPicker extends LitElement {
 
   renderBlockGroup(group) {
     const blockTypes = group._block_types.filter(blockType => this.placeholderIdentifier || this.block.attributes.parent_placeholder ? !blockType.attributes.is_container : true)
-    
+
     if(blockTypes.length <= 0 ) return;
 
     return html`
@@ -98,7 +98,7 @@ export default class BlockPicker extends LitElement {
     const icon = blockType.attributes.icon ? html`<img class="icon" src="${blockType.attributes.icon}" />` : html`<span class="icon font-icon"></span>`
 
     return html`
-      <div class="add-block-btn icn-${blockType.id}" @click="${() => this.handleCreateBlockFromType(blockType)}">  
+      <div class="add-block-btn icn-${blockType.id}" @click="${() => this.handleCreateBlockFromType(blockType)}">
           ${icon}
           <span class="title">${blockType.attributes.name}</span>
       </div>
@@ -172,7 +172,7 @@ export default class BlockPicker extends LitElement {
       .then(html => {
         const template = document.createElement('template');
         template.innerHTML = html;
-  
+
         const futurePage = template.content.querySelector(
           '#page'
         );
@@ -180,9 +180,9 @@ export default class BlockPicker extends LitElement {
         const currentPage = iframe.contentDocument.querySelector(
           '#page'
         );
-  
+
         currentPage.innerHTML = futurePage.innerHTML
-  
+
         this.dispatchEvent(
           new Event('ngl:refresh', {bubbles: true, composed: true})
         );
@@ -203,7 +203,7 @@ export default class BlockPicker extends LitElement {
 
   updated(changedProperties) {
     if(!this.isActive) return;
-    
+
     this.handleOpen()
   }
 

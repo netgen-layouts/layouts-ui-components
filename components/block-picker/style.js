@@ -19,11 +19,11 @@ export default css`
         inset: 0;
         background-color: rgba(0, 0, 0, 0.7);
     }
-    
+
     main.is_active {
         display: block;
     }
-    
+
     .panel {
         position: absolute;
         left: 50%;
@@ -44,7 +44,7 @@ export default css`
     .panel::-webkit-scrollbar-thumb {
         background: #999;
     }
-      
+
     main.is_active .panel {
         transform: translate(-50%, -50%);
         transition: transform 350ms 150ms ease;
@@ -262,7 +262,7 @@ export default css`
             bottom:0em;
         }
     }
-    
+
     @keyframes loadRotate {
         0% {
             transform:rotate(-228deg);

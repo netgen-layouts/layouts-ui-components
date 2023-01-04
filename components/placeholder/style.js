@@ -9,7 +9,7 @@ export default css`
   :host {
     display: contents;
   }
-  
+
   main {
     min-height: 102px;
     position: relative;

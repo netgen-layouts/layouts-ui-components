@@ -24,16 +24,16 @@ export default class Block extends LitElement {
   constructor() {
     super();
 
-    this.loading = false;    
+    this.loading = false;
   }
-  
+
   connectedCallback() {
     if (typeof window.parent.Core === 'undefined') {
       return;
     }
 
     super.connectedCallback();
-     
+
     this.isContainer = this.model.attributes.is_container;
     this.isFullViewBlock = this.model.attributes.definition_identifier === 'full_view'
     this.model.on('change', this.refresh.bind(this));
@@ -261,10 +261,10 @@ export default class Block extends LitElement {
 
     parentBlock.isChildSelected = selected;
   }
-  
+
   setIsContainerSelected(selected) {
     if(!this.isContainer || !this.childBlocks) return;
-    
+
     this.childBlocks.forEach(el => el.isContainerSelected = selected)
   }
 
@@ -284,14 +284,14 @@ export default class Block extends LitElement {
   markPlaceholders() {
     this.toggleMarkPlaceholders(true)
   }
-  
+
   unmarkPlaceholders() {
     this.toggleMarkPlaceholders(false)
   }
-  
+
   toggleMarkPlaceholders(mark) {
     if(!this.placeholders) return;
-    
+
     this.placeholders.forEach(el => el.isMarked = mark)
   }
 
@@ -309,14 +309,14 @@ export default class Block extends LitElement {
   handleMoveBlock(direction) {
     const directionNumber = direction === 'up' ? -1 : 1;
 
-    
+
     let blockIds = [...this.model.zone().attributes.block_ids];
     const fromIndex = blockIds.findIndex(id => id === this.blockId)
-    const toIndex = fromIndex - 1; 
-    
+    const toIndex = fromIndex - 1;
+
     blockIds.splice(fromIndex, 1)
     blockIds.splice(toIndex, 0, this.blockId)
-    
+
     if(this.parentElement) {
       this.model.set({
         parent_position: this.model.attributes.parent_position + directionNumber,
@@ -351,7 +351,7 @@ export default class Block extends LitElement {
       .then(html => {
         const template = document.createElement('template');
         template.innerHTML = html;
-  
+
         const futurePage = template.content.querySelector(
           '#page'
         );
@@ -360,7 +360,7 @@ export default class Block extends LitElement {
           '#page'
         );
         currentPage.innerHTML = futurePage.innerHTML
-  
+
         const blockElement = iframe.contentDocument.querySelector(
           `ngl-block[blockId="${this.blockId}"]`
         )
@@ -380,7 +380,7 @@ export default class Block extends LitElement {
   handleMoveBlockUp() {
     const parentPosition = this.model.attributes.parent_position
     if(parentPosition === 0) this.handleMoveBlockToZoneAbove()
-    
+
     this.handleMoveBlock('up');
   }
 
@@ -388,7 +388,7 @@ export default class Block extends LitElement {
     const parentPosition = this.model.attributes.parent_position
     const numberOfBlocks = this.model.zone().attributes.block_ids.length - 1
     if(parentPosition === numberOfBlocks) this.handleMoveBlockToZoneBelow()
-    
+
     this.handleMoveBlock('down');
   }
 
