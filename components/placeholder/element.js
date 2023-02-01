@@ -16,6 +16,31 @@ export default class Placeholder extends LitElement {
     super();
   }
 
+  get core() {
+    return window.parent.Core;
+  }
+
+  get layout() {
+    return this.core.g.layout;
+  }
+
+  get model() {
+    return (this.cached_model ||= this.layout.blocks.findWhere({
+      id: this.closestBlockId,
+    }));
+  }
+
+  get closestBlockId() {
+    const closestBlock = this.closest('ngl-block');
+    const closestBlockId = closestBlock?.getAttribute('blockid');
+
+    return closestBlockId
+  }
+
+  get isInLinkedZone() {
+    return this.model.zone()?.is_linked();
+  }
+
   get slottedChildren() {
     const slot = this.shadowRoot.querySelector('slot');
     return slot.assignedElements({flatten: true});
@@ -65,6 +90,7 @@ export default class Placeholder extends LitElement {
       is_empty: this.isEmpty,
       is_marked: this.isMarked,
       is_container_empty: this.isContainerEmpty,
+      is_in_linked_zone: this.isInLinkedZone,
     };
 
     return html`

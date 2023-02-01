@@ -10,7 +10,7 @@ export default css`
     display: contents;
   }
 
-  main {
+  main:not(.is_in_linked_zone) {
     min-height: 102px;
     position: relative;
   }
@@ -21,12 +21,12 @@ export default css`
     pointer-events: none;
   }
 
-  main.is_marked:after {
+  main.is_marked:not(.is_in_linked_zone):after {
     content: "";
     border: dashed 1px var(--ngl-block-outline-color-hover);
   }
 
-  main.is_empty.is_marked:after {
+  main.is_empty.is_marked:not(.is_in_linked_zone):after {
     content: "";
     border: dashed 1px var(--ngl-block-outline-color-hover);
     min-height: 100px;
@@ -36,6 +36,7 @@ export default css`
     background-image: linear-gradient(135deg, #cfcfcf 2.94%, rgba(151, 71, 255, 0) 2.94%, rgba(151, 71, 255, 0) 50%, #cfcfcf 50%, #cfcfcf 52.94%, rgba(151, 71, 255, 0) 52.94%, rgba(151, 71, 255, 0) 100%);
     background-size: 24.04px 24.04px;
   }
+
 
   button {
     --_btn-background-color: var(--ngl-block-button-background-color);

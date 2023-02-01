@@ -92,6 +92,11 @@ export default css`
     min-height: 100px;
   }
 
+  main.is_in_linked_zone ::slotted(.ngl-slotted-block):before,
+  main.is_in_linked_zone ::slotted(.ngl-slotted-block):after {
+    display: none;
+  }
+
   .edit-menu {
     z-index: 80010;
     display: none;
