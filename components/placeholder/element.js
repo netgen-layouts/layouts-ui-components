@@ -25,10 +25,6 @@ export default class Placeholder extends LitElement {
   }
 
   get model() {
-    console.debug(this.layout.blocks.findWhere({
-      id: this.closestBlockId,
-    }))
-    
     return (this.cached_model ||= this.layout.blocks.findWhere({
       id: this.closestBlockId,
     }));
