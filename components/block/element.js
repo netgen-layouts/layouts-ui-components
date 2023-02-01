@@ -487,6 +487,7 @@ export default class Block extends LitElement {
       is_container_selected: this.isContainerSelected,
       is_child_selected: this.isChildSelected,
       is_child_block: this.parentElement,
+      is_in_linked_zone: this.isInLinkedZone,
     };
 
     return html`
