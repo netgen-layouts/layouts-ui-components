@@ -79,7 +79,7 @@ describe('ngl-block', () => {
     );
   });
 
-  it('should render block inside shared zone', async () => {
+  it('should render block inside linked zone', async () => {
     stubLayoutEnv({
       block: {
         parent_block_id: null,
