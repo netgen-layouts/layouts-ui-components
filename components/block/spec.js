@@ -79,7 +79,7 @@ describe('ngl-block', () => {
     );
   });
 
-  it('should render block inside zone', async () => {
+  it('should render block inside shared zone', async () => {
     stubLayoutEnv({
       block: {
         parent_block_id: null,
@@ -100,7 +100,7 @@ describe('ngl-block', () => {
     assert.shadowDom.equal(
       element,
       `
-        <main>
+        <main class="is_in_linked_zone">
           <slot></slot>
         </main>
       `
