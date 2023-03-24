@@ -3,6 +3,7 @@ import {classMap} from 'lit/directives/class-map.js';
 import style from './style.js';
 
 import { ArrowDownIcon, ArrowUpIcon, BreadcrumbArrowIcon, PlusIcon, RefreshIcon } from '../icons.js';
+import { formatApiUrlToBypassCache } from '../component-helper.js';
 
 export default class Block extends LitElement {
   static styles = [style];
@@ -115,19 +116,10 @@ export default class Block extends LitElement {
     return this.slottedChildren[0]?.querySelectorAll('ngl-block')
   }
   // GETTERS - end
-
-  formatApiUrl(url) {
-    const urlObject = new URL(url)
-    let searchParams = new URLSearchParams(urlObject.search)
-    searchParams.set('t', Date.now())
-
-    return `${urlObject.origin + urlObject.pathname}?${searchParams.toString()}`
-  }
-
   async fetch() {
     this.loading = true;
     try {
-      const apiUrl = this.formatApiUrl(window.location.href)
+      const apiUrl = formatApiUrlToBypassCache(window.location.href)
       const resp = await fetch(apiUrl);
       return resp.text();
     } finally {
@@ -348,7 +340,7 @@ export default class Block extends LitElement {
   }
 
   async handleRefreshView() {
-    const apiUrl = this.formatApiUrl(window.location.href)
+    const apiUrl = formatApiUrlToBypassCache(window.location.href)
     return await fetch(apiUrl)
       .then(resp => {
         return resp.text()

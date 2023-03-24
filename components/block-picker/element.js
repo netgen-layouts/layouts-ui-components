@@ -1,5 +1,6 @@
 import {LitElement, html} from 'lit';
 import {classMap} from 'lit/directives/class-map.js';
+import { formatApiUrlToBypassCache } from '../component-helper.js';
 import { CloseIcon } from '../icons.js';
 import style from './style.js';
 
@@ -162,16 +163,8 @@ export default class BlockPicker extends LitElement {
     }
   }
 
-  formatApiUrl(url) {
-    const urlObject = new URL(url)
-    let searchParams = new URLSearchParams(urlObject.search)
-    searchParams.set('t', Date.now())
-
-    return `${urlObject.origin + urlObject.pathname}?${searchParams.toString()}`
-  }
-
   async handleRefreshView(blockId) {
-    const apiUrl = this.formatApiUrl(window.location.href)
+    const apiUrl = formatApiUrlToBypassCache(window.location.href)
     return await fetch(apiUrl)
       .then(resp => {
         return resp.text()
