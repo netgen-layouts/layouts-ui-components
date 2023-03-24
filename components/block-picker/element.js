@@ -162,10 +162,17 @@ export default class BlockPicker extends LitElement {
     }
   }
 
+  formatApiUrl(url) {
+    const urlObject = new URL(url)
+    let searchParams = new URLSearchParams(urlObject.search)
+    searchParams.set('t', Date.now())
+
+    return `${urlObject.origin + urlObject.pathname}?${searchParams.toString()}`
+  }
 
   async handleRefreshView(blockId) {
-
-    return await fetch(window.location.href)
+    const apiUrl = this.formatApiUrl(window.location.href)
+    return await fetch(apiUrl)
       .then(resp => {
         return resp.text()
       })

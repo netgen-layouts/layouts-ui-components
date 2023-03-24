@@ -116,11 +116,19 @@ export default class Block extends LitElement {
   }
   // GETTERS - end
 
+  formatApiUrl(url) {
+    const urlObject = new URL(url)
+    let searchParams = new URLSearchParams(urlObject.search)
+    searchParams.set('t', Date.now())
+
+    return `${urlObject.origin + urlObject.pathname}?${searchParams.toString()}`
+  }
 
   async fetch() {
     this.loading = true;
     try {
-      const resp = await fetch(window.location.href);
+      const apiUrl = this.formatApiUrl(window.location.href)
+      const resp = await fetch(apiUrl);
       return resp.text();
     } finally {
       this.loading = false;
@@ -243,8 +251,6 @@ export default class Block extends LitElement {
   select() {
     if (this.isInLinkedZone) return;
 
-    console.debug(this.model)
-
     this.model.trigger('edit');
     this.isSelected = true;
   }
@@ -339,12 +345,11 @@ export default class Block extends LitElement {
         this.handleRefreshView()
       })
     }
-
   }
 
   async handleRefreshView() {
-
-    return await fetch(window.location.href)
+    const apiUrl = this.formatApiUrl(window.location.href)
+    return await fetch(apiUrl)
       .then(resp => {
         return resp.text()
       })
