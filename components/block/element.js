@@ -3,6 +3,7 @@ import {classMap} from 'lit/directives/class-map.js';
 import style from './style.js';
 
 import { ArrowDownIcon, ArrowUpIcon, BreadcrumbArrowIcon, PlusIcon, RefreshIcon } from '../icons.js';
+import { addTimestampToUrl } from '../component-helper.js';
 
 export default class Block extends LitElement {
   static styles = [style];
@@ -115,12 +116,11 @@ export default class Block extends LitElement {
     return this.slottedChildren[0]?.querySelectorAll('ngl-block')
   }
   // GETTERS - end
-
-
   async fetch() {
     this.loading = true;
     try {
-      const resp = await fetch(window.location.href);
+      const apiUrl = addTimestampToUrl(window.location.href)
+      const resp = await fetch(apiUrl);
       return resp.text();
     } finally {
       this.loading = false;
@@ -243,8 +243,6 @@ export default class Block extends LitElement {
   select() {
     if (this.isInLinkedZone) return;
 
-    console.debug(this.model)
-
     this.model.trigger('edit');
     this.isSelected = true;
   }
@@ -339,12 +337,11 @@ export default class Block extends LitElement {
         this.handleRefreshView()
       })
     }
-
   }
 
   async handleRefreshView() {
-
-    return await fetch(window.location.href)
+    const apiUrl = addTimestampToUrl(window.location.href)
+    return await fetch(apiUrl)
       .then(resp => {
         return resp.text()
       })
