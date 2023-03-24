@@ -3,7 +3,7 @@ import {classMap} from 'lit/directives/class-map.js';
 import style from './style.js';
 
 import { ArrowDownIcon, ArrowUpIcon, BreadcrumbArrowIcon, PlusIcon, RefreshIcon } from '../icons.js';
-import { formatApiUrlToBypassCache } from '../component-helper.js';
+import { addTimestampToUrl } from '../component-helper.js';
 
 export default class Block extends LitElement {
   static styles = [style];
@@ -119,7 +119,7 @@ export default class Block extends LitElement {
   async fetch() {
     this.loading = true;
     try {
-      const apiUrl = formatApiUrlToBypassCache(window.location.href)
+      const apiUrl = addTimestampToUrl(window.location.href)
       const resp = await fetch(apiUrl);
       return resp.text();
     } finally {
@@ -340,7 +340,7 @@ export default class Block extends LitElement {
   }
 
   async handleRefreshView() {
-    const apiUrl = formatApiUrlToBypassCache(window.location.href)
+    const apiUrl = addTimestampToUrl(window.location.href)
     return await fetch(apiUrl)
       .then(resp => {
         return resp.text()
