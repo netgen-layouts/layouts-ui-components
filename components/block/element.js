@@ -52,7 +52,7 @@ export default class Block extends LitElement {
   }
 
   handleMessageRecieved(data) {
-    const { contentId, blockId, locale } = data;
+    const {  blockId  } = data;
 
     if(blockId !== this.blockId) return;
 
@@ -67,6 +67,15 @@ export default class Block extends LitElement {
 
   get layout() {
     return this.core.g.layout;
+  }
+
+  get zones() {
+    const zoneElements = [...window.parent.document.querySelectorAll("[data-zone]")]
+    const sortedZones = zoneElements.map(el => {
+      return this.core.g.layout.zones.models.find(zone => zone.id === el.dataset.zone);
+    }).filter(Boolean).filter(zone => !zone.attributes.linked_zone_identifier)
+
+    return sortedZones
   }
 
   get model() {
@@ -91,7 +100,7 @@ export default class Block extends LitElement {
   }
 
   get parentName() {
-    if (!this.parentElement) return;
+    if (!this.parentElement) return "";
 
     return this.parentElement.getAttribute('viewTypeName')
   }
@@ -105,7 +114,10 @@ export default class Block extends LitElement {
   }
 
   get slottedChildren() {
-    return this.slot.assignedElements({flatten: true});
+    if (!this.slot) return [];
+
+    this.cached_slottedChildren ||= this.slot.assignedElements({flatten: true});
+    return this.cached_slottedChildren;
   }
 
   get placeholders() {
@@ -304,9 +316,24 @@ export default class Block extends LitElement {
     this.isHovered = false;
   }
 
-  handleMoveBlock(direction) {
-    const directionNumber = direction === 'up' ? -1 : 1;
+  handleMoveBlock(blockIds, zoneIdentifier, parentPosition) {
 
+    this.model.set({
+      parent_position: zoneIdentifier,
+      zone_identifier: parentPosition
+    });
+
+    this.model
+      .move(blockIds)
+      .then(() => {
+        this.handleRefreshView()
+      })
+  }
+
+  handleMoveInsideSameZone(direction) {
+    console.debug("Move Inside Same Zone")
+
+    const directionNumber = direction === 'up' ? -1 : 1;
 
     let blockIds = [...this.model.zone().attributes.block_ids];
     const fromIndex = blockIds.findIndex(id => id === this.blockId)
@@ -315,28 +342,45 @@ export default class Block extends LitElement {
     blockIds.splice(fromIndex, 1)
     blockIds.splice(toIndex, 0, this.blockId)
 
-    if(this.parentElement) {
-      this.model.set({
-        parent_position: this.model.attributes.parent_position + directionNumber,
-        zone_identifier: this.model.attributes.zone_identifier,
-        parent_placeholder: this.model.attributes.placeholder_id,
-        parent_block_id: this.model.attributes.parent_block_id
-      });
-      this.model.move_to_container(blockIds)
-      .then(() => {
-        const iframe =  window.parent.document.querySelector('.preview-iframe-sizer iframe')
-        iframe?.contentWindow.location.reload()
-      })
-    } else {
-      this.model.set({
-        parent_position: this.model.attributes.parent_position + directionNumber,
-        zone_identifier: this.model.attributes.zone_identifier
-      });
-      this.model.move(blockIds)
-      .then(() => {
-        this.handleRefreshView()
-      })
-    }
+    const parentPosition = this.model.attributes.parent_position + directionNumber
+    const zoneIdentifier = this.model.attributes.zone_identifier
+
+    this.handleMoveBlock(blockIds, parentPosition, zoneIdentifier)
+  }
+
+  handleMoveOutOfContainer(direction) {
+    const directionNumber = direction === 'up' ? -1 : 1;
+
+    const blockIds = [...this.model.zone().attributes.block_ids];
+
+    const fromIndex = blockIds.findIndex(id => id === this.parentModel.id)
+    const toIndex = fromIndex - 1;
+
+    blockIds.splice(fromIndex, 1)
+    blockIds.splice(toIndex, 0, this.blockId)
+
+    const parentPosition = this.parentModel.attributes.parent_position + directionNumber
+    const zoneIdentifier = this.model.attributes.zone_identifier
+
+    this.handleMoveBlock(blockIds, parentPosition, zoneIdentifier)
+  }
+
+  handleMoveInsideContainer(parentPlaceholder) {
+    console.debug("Move Inside Container")
+    const blockIds = [...this.model.zone().attributes.block_ids];
+
+    this.model.set({
+      parent_position: this.model.attributes.parent_position,
+      zone_identifier: this.model.attributes.zone_identifier,
+      parent_placeholder: parentPlaceholder,
+      parent_block_id: this.model.attributes.parent_block_id
+    });
+
+    this.model
+    .move_to_container(blockIds)
+    .then(() => {
+      this.handleRefreshView()
+    })
   }
 
   async handleRefreshView() {
@@ -374,27 +418,113 @@ export default class Block extends LitElement {
       })
   }
 
-  handleMoveBlockUp() {
-    const parentPosition = this.model.attributes.parent_position
-    if(parentPosition === 0) this.handleMoveBlockToZoneAbove()
+    // if in container and is first or last perform standard up/down handleMoveBlock
+  // if moving to container perform move_to_container
+  // if moving to another zone perfome standard handleMove with new zone_identifier and block.length + 1 inside that new zone
+  // if first in first zone dont disable move up button or if last in last zone disable move down button
 
-    this.handleMoveBlock('up');
+  // if inside container and in right column
+    // move outside of container? or move to prev/next zone?
+
+
+  handleMoveBlockUp() {
+    if(this.isFirstBlockInFirstZone()) return
+
+    if(!this.parentElement) {
+      if(this.isFirstBlockInZone()) return this.handleMoveBlockToZoneAbove()
+
+      return this.handleMoveInsideSameZone('up')
+    }
+
+    const parentPlaceholder = this.model.attributes.parent_placeholder
+    const placeholders = this.parentModel.attributes.placeholders
+    const placeholder = placeholders.find(pl => pl.identifier === "center_right") || placeholders.find(pl => pl.identifier === "center")
+
+    switch (parentPlaceholder) {
+      case "center_right":
+        this.handleMoveInsideContainer("center_left")
+        break;
+
+      case "center_left":
+        this.handleMoveInsideContainer("left")
+        break;
+
+      case "center":
+        this.handleMoveInsideContainer("left")
+        break;
+
+      case "right":
+        this.handleMoveInsideContainer(placeholder.identifier)
+        break;
+
+      default:
+        this.handleMoveOutOfContainer('up');
+        break;
+    }
   }
 
   handleMoveBlockDown() {
-    const parentPosition = this.model.attributes.parent_position
-    const numberOfBlocks = this.model.zone().attributes.block_ids.length - 1
-    if(parentPosition === numberOfBlocks) this.handleMoveBlockToZoneBelow()
+    if(this.isLastBlockInLastZone()) return
 
-    this.handleMoveBlock('down');
+    if(!this.parentElement) {
+      if(this.isLastBlockInZone()) return this.handleMoveBlockToZoneBelow()
+
+      return this.handleMoveInsideSameZone('down');
+    }
+
+    const parentPlaceholder = this.model.attributes.parent_placeholder
+    const placeholders = this.parentModel.attributes.placeholders
+    const placeholder = placeholders.find(pl => pl.identifier === "center_left") || placeholders.find(pl => pl.identifier === "center")
+
+    switch (parentPlaceholder) {
+      case "center_right":
+        this.handleMoveInsideContainer("right")
+        break;
+
+      case "center_left":
+        this.handleMoveInsideContainer("center_right")
+        break;
+
+      case "center":
+        this.handleMoveInsideContainer("right")
+        break;
+
+      case "left":
+        this.handleMoveInsideContainer(placeholder.identifier)
+        break;
+
+      default:
+        this.handleMoveOutOfContainer('down');
+        break;
+    }
   }
 
   handleMoveBlockToZoneAbove() {
-    // @todo: implement move block to zone above
+    const currentZoneIndex = this.zones.findIndex(zone => this.model.zone().id === zone.id)
+    const zoneAbove = this.zones[currentZoneIndex-1]
+    const blockIds = [...zoneAbove.attributes.block_ids, this.blockId]
+    const zoneIdentifier = zoneAbove.id
+    const parentPosition = zoneAbove.attributes.block_ids.length > 0 ? zoneAbove.attributes.block_ids.length - 1 : 0
+
+    this.handleMoveBlock(blockIds, parentPosition, zoneIdentifier)
   }
 
   handleMoveBlockToZoneBelow() {
-    // @todo: implement move block to zone below
+    const currentZoneIndex = this.zones.findIndex(zone => this.model.zone().id === zone.id)
+    const zoneBelow = this.zones[currentZoneIndex+1]
+    const blockIds = [this.blockId,...zoneBelow.attributes.block_ids]
+    const zoneIdentifier = zoneBelow.id
+    const parentPosition = zoneBelow.attributes.block_ids.length > 0 ? 1 : 0
+
+    this.handleMoveBlock(blockIds, parentPosition, zoneIdentifier)
+  }
+
+
+  handleDuplicateBlock() {
+    this.model.copy(Boolean(this.parentElement)).then(() => {
+      this.handleRefreshView()
+
+    })
   }
   // EVENTS - end
 
@@ -410,16 +540,36 @@ export default class Block extends LitElement {
     `;
   }
 
+  isFirstBlockInZone() {
+    const parentPosition = this.model.attributes.parent_position
+
+    return parentPosition === 0
+  }
+
+  isLastBlockInZone() {
+    const parentPosition = this.model.attributes.parent_position
+    const numberOfBlocksInZone = this.model.zone().attributes.block_ids.length - 1
+
+    return parentPosition ===numberOfBlocksInZone
+  }
+
+  isFirstBlockInFirstZone() {
+
+    return this.isFirstBlockInZone() && this.zones[0].id === this.model.zone().id
+  }
+
+  isLastBlockInLastZone() {
+    return this.isLastBlockInZone() && this.zones[this.zones.length-1].id === this.model.zone().id
+  }
+
   renderMoveButtons() {
     return html`
-      <div class="move-btns">
-        <button class="move-btn" @click=${this.handleMoveBlockUp}>
-          ${ArrowUpIcon()}
-        </button>
-        <button class="move-btn" @click=${this.handleMoveBlockDown}>
-          ${ArrowDownIcon()}
-        </button>
-      </div>
+      <button class="move-btn" .disabled=${this.isFirstBlockInFirstZone()} @click=${this.handleMoveBlockUp}>
+        ${ArrowUpIcon()}
+      </button>
+      <button class="move-btn" .disabled=${this.isLastBlockInLastZone()} @click=${this.handleMoveBlockDown}>
+        ${ArrowDownIcon()}
+      </button>
     `
   }
 
@@ -429,7 +579,54 @@ export default class Block extends LitElement {
     return html`
       <div class="edit-menu">
         ${this.renderOuterBlockMenu()}
+        ${this.renderDropdownMenu()}
       </div>`
+  }
+
+  toggleVisibilityModal() {
+    console.debug("modal:visibility")
+    this.model.trigger("modal:visibility")
+  }
+
+  toggleCacheModal() {
+    this.model.trigger("modal:cache")
+  }
+
+  handleRevert() {
+    this.model.trigger("revert")
+  }
+
+  handleDeleteBlock() {
+    console.debug("modal:delete")
+    this.model.trigger("modal:delete")
+  }
+
+  toggleDropdownMenu() {
+  this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  renderDropdownMenu() {
+    return html`
+    <div class="dropdown">
+      <button @click=${this.toggleDropdownMenu}>
+        ${MenuDotsIcon()}
+      </button>
+      <div class="dropdown-menu" .hidden=${!this.isDropdownOpen}>
+        <div class="dropdown-menu-item" @click=${this.toggleVisibilityModal}>
+          Configure visibility
+        </div>
+        <div class="dropdown-menu-item" @click=${this.toggleCacheModal}>
+          Configure cache
+        </div>
+        <div class="dropdown-menu-item" @click=${this.handleRevert}>
+          Revert to published version
+        </div>
+        <div class="dropdown-menu-item" @click=${this.handleDeleteBlock}>
+          Delete block
+        </div>
+      </div>
+    </div>
+    `
   }
 
   renderOuterBlockMenu() {
@@ -461,6 +658,13 @@ export default class Block extends LitElement {
         ${this.renderOuterBlockBreadcrumbs()}
       </div>
     `;
+  }
+
+  renderActionButtons() {
+    return html`
+      <div class="action-btns">
+        ${this.renderMoveButtons()}
+      </div>`
   }
 
   renderOuterBlockBreadcrumbs() {
@@ -495,6 +699,7 @@ export default class Block extends LitElement {
       >
         ${this.renderBreadcrumbs()}
         ${this.renderMenu()}
+        ${this.renderActionButtons()}
         <slot @click=${this.selectOnBlockClick} @slotchange=${this.setIsEmptyState}></slot>
         ${this.renderAddButton()}
       </main>
