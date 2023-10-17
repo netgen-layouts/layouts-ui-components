@@ -97,3 +97,23 @@ export const CloseIcon = () => {
     </svg>
   `
 }
+
+
+export const DuplicateIcon = () => {
+  return html`
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="8" height="8" rx="2" fill="white"/>
+      <rect x="6.5" y="6.5" width="7" height="7" rx="1.5" stroke="white"/>
+    </svg>
+  `
+}
+
+export const MenuDotsIcon = () => {
+  return html`
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="9" y="4" width="2" height="2" rx="1" transform="rotate(-180 9 4)" fill="white"/>
+      <rect x="9" y="9" width="2" height="2" rx="1" transform="rotate(-180 9 9)" fill="white"/>
+      <rect x="9" y="14" width="2" height="2" rx="1" transform="rotate(-180 9 14)" fill="white"/>
+    </svg>
+  `
+}

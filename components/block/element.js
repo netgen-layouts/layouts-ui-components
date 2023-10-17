@@ -2,7 +2,7 @@ import {LitElement, html} from 'lit';
 import {classMap} from 'lit/directives/class-map.js';
 import style from './style.js';
 
-import { ArrowDownIcon, ArrowUpIcon, BreadcrumbArrowIcon, PlusIcon, RefreshIcon } from '../icons.js';
+import { ArrowDownIcon, ArrowUpIcon, BreadcrumbArrowIcon, DuplicateIcon, MenuDotsIcon, PlusIcon, RefreshIcon } from '../icons.js';
 import { addTimestampToUrl } from '../component-helper.js';
 
 export default class Block extends LitElement {
@@ -20,6 +20,7 @@ export default class Block extends LitElement {
     isContainerSelected: {type: Boolean, default: false},
     isChildSelected: {type: Boolean, default: false},
     isFullViewBlock: {type: Boolean, default: false},
+    isDropdownOpen:  {type: Boolean, default: false},
   };
 
   constructor() {
@@ -45,10 +46,21 @@ export default class Block extends LitElement {
       this.setIsChildSelected(false)
     });
 
+    this.model.on("delete:success", () => {
+      parent.document.querySelector('.preview-iframe-sizer iframe')?.contentWindow.location.reload();
+    })
+
+    this.model.on("positions:update", () => {
+      parent.document.querySelector('.preview-iframe-sizer iframe')?.contentWindow.location.reload();
+    })
+
+
     const bc = new BroadcastChannel('publish_content');
     bc.onmessage = (event) => {
       this.handleMessageRecieved(event.data)
     };
+
+    this.isDropdownOpen = false
   }
 
   handleMessageRecieved(data) {
@@ -82,6 +94,16 @@ export default class Block extends LitElement {
     return (this.cached_model ||= this.layout.blocks.findWhere({
       id: this.blockId,
     }));
+  }
+
+  get modelElement() {
+    return document.querySelector(
+      `ngl-block[blockId="${this.blockId}"]`
+    )
+  }
+
+  get slottedModelElement() {
+    return this.modelElement.querySelector(".ngl-slotted-block")
   }
 
   get parentModel() {
@@ -223,6 +245,12 @@ export default class Block extends LitElement {
     if(this.isSelected) this.markPlaceholders()
   }
 
+  handleSlotChnage() {
+    this.setIsEmptyState()
+
+    if(this.isSelected) this.slottedModelElement.scrollIntoView()
+  }
+
   setChildBlocksIsEmptyState() {
     if(!this.isEmpty) return;
 
@@ -330,6 +358,26 @@ export default class Block extends LitElement {
       })
   }
 
+  handleMoveInsideSamePlaceholder(direction) {
+    const directionNumber = direction === 'up' ? -1 : 1;
+
+    const blockIds = [...this.model.zone().attributes.block_ids]
+    const parentPosition = this.model.attributes.parent_position + directionNumber
+
+    this.model.set({
+      parent_position: parentPosition,
+      zone_identifier: this.model.attributes.zone_identifier,
+      parent_placeholder: this.model.attributes.parent_placeholder,
+      parent_block_id: this.model.attributes.parent_block_id
+    });
+
+    this.model
+    .move_to_container(blockIds)
+    .then(() => {
+      this.handleRefreshView()
+    })
+  }
+
   handleMoveInsideSameZone(direction) {
     console.debug("Move Inside Same Zone")
 
@@ -349,7 +397,7 @@ export default class Block extends LitElement {
   }
 
   handleMoveOutOfContainer(direction) {
-    const directionNumber = direction === 'up' ? -1 : 1;
+    const directionNumber = direction === 'up' ? 0 : 1;
 
     const blockIds = [...this.model.zone().attributes.block_ids];
 
@@ -369,8 +417,11 @@ export default class Block extends LitElement {
     console.debug("Move Inside Container")
     const blockIds = [...this.model.zone().attributes.block_ids];
 
+    const placeholders = this.parentModel.attributes.placeholders
+    const placeholder = placeholders.find(pl => pl.identifier === parentPlaceholder)
+
     this.model.set({
-      parent_position: this.model.attributes.parent_position,
+      parent_position: placeholder.blocks.length,
       zone_identifier: this.model.attributes.zone_identifier,
       parent_placeholder: parentPlaceholder,
       parent_block_id: this.model.attributes.parent_block_id
@@ -407,6 +458,7 @@ export default class Block extends LitElement {
         )
         blockElement.isSelected = true;
         this.model.trigger('edit');
+
       })
       .catch(err => {
         console.error(err);
@@ -418,15 +470,6 @@ export default class Block extends LitElement {
       })
   }
 
-    // if in container and is first or last perform standard up/down handleMoveBlock
-  // if moving to container perform move_to_container
-  // if moving to another zone perfome standard handleMove with new zone_identifier and block.length + 1 inside that new zone
-  // if first in first zone dont disable move up button or if last in last zone disable move down button
-
-  // if inside container and in right column
-    // move outside of container? or move to prev/next zone?
-
-
   handleMoveBlockUp() {
     if(this.isFirstBlockInFirstZone()) return
 
@@ -436,9 +479,13 @@ export default class Block extends LitElement {
       return this.handleMoveInsideSameZone('up')
     }
 
+    if(this.parentElement && !this.isFirstBlockInPlaceholder()) {
+      return this.handleMoveInsideSamePlaceholder('up');
+    }
+
     const parentPlaceholder = this.model.attributes.parent_placeholder
     const placeholders = this.parentModel.attributes.placeholders
-    const placeholder = placeholders.find(pl => pl.identifier === "center_right") || placeholders.find(pl => pl.identifier === "center")
+    const placeholder = placeholders.find(pl => pl.identifier === "center_right") || placeholders.find(pl => pl.identifier === "center") || placeholders.find(pl => pl.identifier === "left")
 
     switch (parentPlaceholder) {
       case "center_right":
@@ -472,9 +519,13 @@ export default class Block extends LitElement {
       return this.handleMoveInsideSameZone('down');
     }
 
+    if(this.parentElement && !this.isLastBlockInPlaceholder()) {
+      return this.handleMoveInsideSamePlaceholder('down');
+    }
+
     const parentPlaceholder = this.model.attributes.parent_placeholder
     const placeholders = this.parentModel.attributes.placeholders
-    const placeholder = placeholders.find(pl => pl.identifier === "center_left") || placeholders.find(pl => pl.identifier === "center")
+    const placeholder = placeholders.find(pl => pl.identifier === "center_left") || placeholders.find(pl => pl.identifier === "center") || placeholders.find(pl => pl.identifier === "right")
 
     switch (parentPlaceholder) {
       case "center_right":
@@ -519,11 +570,9 @@ export default class Block extends LitElement {
     this.handleMoveBlock(blockIds, parentPosition, zoneIdentifier)
   }
 
-
   handleDuplicateBlock() {
     this.model.copy(Boolean(this.parentElement)).then(() => {
       this.handleRefreshView()
-
     })
   }
   // EVENTS - end
@@ -540,6 +589,21 @@ export default class Block extends LitElement {
     `;
   }
 
+  isFirstBlockInPlaceholder() {
+    const parentPosition = this.model.attributes.parent_position
+
+    return parentPosition === 0
+  }
+
+  isLastBlockInPlaceholder() {
+    const parentPosition = this.model.attributes.parent_position
+    const placeholders = this.parentModel.attributes.placeholders
+    const currentPlaceholder = placeholders.find(pl => pl.identifier === this.model.attributes.parent_placeholder)
+    const numberOfBlocksInPlaceholder = currentPlaceholder.blocks.length - 1
+
+    return parentPosition === numberOfBlocksInPlaceholder
+  }
+
   isFirstBlockInZone() {
     const parentPosition = this.model.attributes.parent_position
 
@@ -550,11 +614,10 @@ export default class Block extends LitElement {
     const parentPosition = this.model.attributes.parent_position
     const numberOfBlocksInZone = this.model.zone().attributes.block_ids.length - 1
 
-    return parentPosition ===numberOfBlocksInZone
+    return parentPosition === numberOfBlocksInZone
   }
 
   isFirstBlockInFirstZone() {
-
     return this.isFirstBlockInZone() && this.zones[0].id === this.model.zone().id
   }
 
@@ -584,7 +647,6 @@ export default class Block extends LitElement {
   }
 
   toggleVisibilityModal() {
-    console.debug("modal:visibility")
     this.model.trigger("modal:visibility")
   }
 
@@ -597,12 +659,11 @@ export default class Block extends LitElement {
   }
 
   handleDeleteBlock() {
-    console.debug("modal:delete")
     this.model.trigger("modal:delete")
   }
 
   toggleDropdownMenu() {
-  this.isDropdownOpen = !this.isDropdownOpen;
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   renderDropdownMenu() {
@@ -660,10 +721,18 @@ export default class Block extends LitElement {
     `;
   }
 
+  renderDuplicateButton() {
+    return html`
+      <button class="duplicate-btn" @click=${this.handleDuplicateBlock}>
+        ${DuplicateIcon()}
+      </button>`
+  }
+
   renderActionButtons() {
     return html`
       <div class="action-btns">
         ${this.renderMoveButtons()}
+        ${this.renderDuplicateButton()}
       </div>`
   }
 
@@ -700,7 +769,7 @@ export default class Block extends LitElement {
         ${this.renderBreadcrumbs()}
         ${this.renderMenu()}
         ${this.renderActionButtons()}
-        <slot @click=${this.selectOnBlockClick} @slotchange=${this.setIsEmptyState}></slot>
+        <slot @click=${this.selectOnBlockClick} @slotchange=${this.handleSlotChnage}></slot>
         ${this.renderAddButton()}
       </main>
     `;
