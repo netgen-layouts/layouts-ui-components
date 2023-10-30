@@ -5,6 +5,8 @@ import style from './style.js';
 import { ArrowDownIcon, ArrowUpIcon, BreadcrumbArrowIcon, DuplicateIcon, MenuDotsIcon, PlusIcon, RefreshIcon } from '../icons.js';
 import { addTimestampToUrl } from '../component-helper.js';
 
+
+
 export default class Block extends LitElement {
   static styles = [style];
 
@@ -413,6 +415,30 @@ export default class Block extends LitElement {
     this.handleMoveBlock(blockIds, parentPosition, zoneIdentifier)
   }
 
+  handleMoveIntoContainer(direction) {
+    console.debug("Move into Container")
+    const blockIds = [...this.model.zone().attributes.block_ids];
+
+    const parentBlockId = direction === "up" ? this.getPrevBlockId() : this.getNextBlockId()
+    const placeholders = this.getBlockById(parentBlockId).attributes.placeholders
+
+    const getPlaceholder= (pl) => direction === "up" ? pl.identifier === "right" : pl.identifier === "left"
+    const parentPlaceholder = placeholders.find(pl => getPlaceholder(pl)) || placeholders.find(pl => pl.identifier === "center")
+
+    this.model.set({
+      parent_position: direction === "up"  ? parentPlaceholder.blocks.length : 0,
+      zone_identifier: this.model.attributes.zone_identifier,
+      parent_placeholder: parentPlaceholder.identifier,
+      parent_block_id: parentBlockId
+    });
+
+    this.model
+    .move_to_container(blockIds)
+    .then(() => {
+      this.handleRefreshView()
+    })
+  }
+
   handleMoveInsideContainer(parentPlaceholder) {
     console.debug("Move Inside Container")
     const blockIds = [...this.model.zone().attributes.block_ids];
@@ -473,19 +499,21 @@ export default class Block extends LitElement {
   handleMoveBlockUp() {
     if(this.isFirstBlockInFirstZone()) return
 
+    const parentPlaceholder = this.model.attributes.parent_placeholder
+    const placeholders = this.parentModel.attributes.placeholders
+    const placeholder = placeholders.find(pl => pl.identifier === "center_right") || placeholders.find(pl => pl.identifier === "center") || placeholders.find(pl => pl.identifier === "left")
+
     if(!this.parentElement) {
       if(this.isFirstBlockInZone()) return this.handleMoveBlockToZoneAbove()
+      if(!this.isPrevBlockContainer()) return this.handleMoveInsideSameZone('up');
 
-      return this.handleMoveInsideSameZone('up')
+      return this.handleMoveIntoContainer("up")
     }
 
     if(this.parentElement && !this.isFirstBlockInPlaceholder()) {
       return this.handleMoveInsideSamePlaceholder('up');
     }
 
-    const parentPlaceholder = this.model.attributes.parent_placeholder
-    const placeholders = this.parentModel.attributes.placeholders
-    const placeholder = placeholders.find(pl => pl.identifier === "center_right") || placeholders.find(pl => pl.identifier === "center") || placeholders.find(pl => pl.identifier === "left")
 
     switch (parentPlaceholder) {
       case "center_right":
@@ -515,8 +543,10 @@ export default class Block extends LitElement {
 
     if(!this.parentElement) {
       if(this.isLastBlockInZone()) return this.handleMoveBlockToZoneBelow()
+      if(!this.isNextBlockContainer()) return this.handleMoveInsideSameZone('down');
 
-      return this.handleMoveInsideSameZone('down');
+
+      return this.handleMoveIntoContainer("down")
     }
 
     if(this.parentElement && !this.isLastBlockInPlaceholder()) {
@@ -526,6 +556,7 @@ export default class Block extends LitElement {
     const parentPlaceholder = this.model.attributes.parent_placeholder
     const placeholders = this.parentModel.attributes.placeholders
     const placeholder = placeholders.find(pl => pl.identifier === "center_left") || placeholders.find(pl => pl.identifier === "center") || placeholders.find(pl => pl.identifier === "right")
+
 
     switch (parentPlaceholder) {
       case "center_right":
@@ -623,6 +654,45 @@ export default class Block extends LitElement {
 
   isLastBlockInLastZone() {
     return this.isLastBlockInZone() && this.zones[this.zones.length-1].id === this.model.zone().id
+  }
+
+  isNextBlockContainer() {
+    const nextBlockId = this.getNextBlockId()
+    console.debug({nextBlockId})
+    if(!nextBlockId) return false;
+
+    const nextBlockModel = this.getBlockById(nextBlockId)
+    return nextBlockModel?.attributes?.is_container
+  }
+
+  isPrevBlockContainer() {
+    const prevBlockId = this.getPrevBlockId()
+    if(!prevBlockId) return false;
+
+    const prevBlockModel = this.getBlockById(prevBlockId)
+    console.debug(prevBlockModel,this.layout.block.models)
+
+    return prevBlockModel?.attributes?.is_container
+  }
+
+  getPrevBlockId() {
+    const currentBlockIndex = this.model.attributes.parent_position
+    if(currentBlockIndex === 0) return null
+
+    const blockIds = this.model.zone().attributes.block_ids
+    return blockIds[currentBlockIndex + 1]
+  }
+
+  getNextBlockId() {
+    const currentBlockIndex = this.model.attributes.parent_position
+    const blockIds = this.model.zone().attributes.block_ids
+
+    if(currentBlockIndex === blockIds.length -1) return null
+    return blockIds[currentBlockIndex + 1]
+  }
+
+  getBlockById(id) {
+    return this.layout.blocks.models.find(block => block.id === id)
   }
 
   renderMoveButtons() {
