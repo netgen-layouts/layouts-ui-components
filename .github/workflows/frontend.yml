@@ -25,4 +25,8 @@ jobs:
 
       - run: yarn install
 
+      -
+        run: yarn playwright install
+        if: ${{ matrix.script == 'test' }}
+
       - run: yarn run ${{ matrix.script }}
