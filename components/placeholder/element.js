@@ -47,6 +47,10 @@ export default class Placeholder extends LitElement {
   }
 
   connectedCallback() {
+    if (typeof window.parent.Core === 'undefined') {
+      return;
+    }
+
     super.connectedCallback();
   }
 
